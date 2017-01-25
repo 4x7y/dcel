@@ -1,4 +1,4 @@
-# ComputionalGeometry
+# Computational Geometry
 
 ## ToDo
 
