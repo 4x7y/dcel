@@ -23,6 +23,6 @@ int convexHull(const    std::vector<Point2_<T> >& points,
 
 	return 0;
 }
-}
+} // namespace geo
 
 #endif /* GEO_CONVEX_HULL_HPP */

@@ -102,9 +102,9 @@ void lineIntersect(const std::vector<geo::Edge2i>& seg, std::vector<geo::Point2i
 int main(int argc, const char * argv[])
 {
 	// DCEL Test
-	geo::DCEL<VertexData, EdgeData, FaceData> dcel;
-	generateDCEL(dcel);
-
+	auto dcel = new geo::DCEL<VertexData, EdgeData, FaceData>();
+	generateDCEL(*dcel);
+	delete dcel;
 
     // Initialization
     cv::RNG rng;

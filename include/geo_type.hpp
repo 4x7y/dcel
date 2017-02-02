@@ -219,6 +219,7 @@ public:
 		Vertex* v2    = vpair.second;
 
 		edges.push_back(e12);
+		edges.push_back(e21);
 
 		e12->origin   = v1;
 		e12->dst      = v2;
@@ -238,7 +239,6 @@ public:
 	Face* addFace(const FaceDataT& data, const std::vector<HalfEdge *>& boundary)
 	{
 		Face* f = new Face(data);
-
 		faces.push_back(f);
 
 		size_t i;
@@ -251,6 +251,24 @@ public:
 		}
 
 		return f;
+	}
+
+	~DCEL()
+	{
+		for (auto v : vertices)
+		{
+			delete v;
+		}
+
+		for (auto e : edges)
+		{
+			delete e;
+		}
+
+		for	(auto f : faces)
+		{
+			delete f;
+		}
 	}
 };
 
