@@ -1,5 +1,7 @@
 # Computational Geometry
 
+[![Build Status](https://travis-ci.org/4x7y/ComputationalGeometry.svg?branch=master)](https://travis-ci.org/4x7y/ComputationalGeometry)
+
 ## ToDo
 
 1. ConvexHull
