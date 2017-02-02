@@ -1,10 +1,11 @@
-#ifndef convexHull_hpp
-#define convexHull_hpp
+#ifndef GEO_CONVEX_HULL_HPP
+#define GEO_CONVEX_HULL_HPP
 
 #include <algorithm>
 #include <iostream>
+#include <vector>
 
-#include "util.hpp"
+#include "geo_type.hpp"
 
 namespace geo
 {
@@ -24,4 +25,4 @@ int convexHull(const    std::vector<Point2_<T> >& points,
 }
 }
 
-#endif /* convexHull_hpp */
+#endif /* GEO_CONVEX_HULL_HPP */
