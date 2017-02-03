@@ -1,220 +1,364 @@
 #ifndef GEO_BTREE_HPP
 #define GEO_BTREE_HPP
 
-#include <iostream>
-using std::cout;
-
 namespace geo
 {
-std::vector<int> ar;
 
-template<class _Ty> class BinaryBalanceTreeTree;
+template<class _Tp>
+class Status
+{
+	typedef enum { RED, BLACK } Color;
 
-template<class _Ty>
-class Node {
-public:
+	struct Node {
+		_Tp*				value;
+		Color				color;
+		Node				*leftTree, *rightTree, *parent;
 
-	Node() { left = right = NULL; }
-	Node(const T& el, Node *l = 0, Node *r = 0) {
+		Node()
+			: value(nullptr)
+			, color(RED)
+			, leftTree(nullptr)
+			, rightTree(nullptr)
+			, parent(nullptr)
+		{}
 
-		key = el; left = l; right = r;
+		Node* grandParent()
+		{
+			if (parent == nullptr) {
+				return nullptr;
+			}
+			return parent->parent;
+		}
+
+		Node* uncle()
+		{
+			if (grandParent() == nullptr) {
+				return nullptr;
+			}
+
+			if (parent == grandParent()->rightTree) {
+				return grandParent()->leftTree;
+			}
+			return grandParent()->rightTree;
+		}
+
+		Node* sibling() {
+			if (parent->leftTree == this) {
+				return parent->rightTree;
+			}
+			return parent->leftTree;
+		}
+	};
+
+private:
+
+	Node *root, *NIL;
+
+	void rotateRight(Node* p) {
+		Node *gp = p->grandparent();
+		Node *fa = p->parent;
+		Node *y  = p->rightTree;
+
+		fa->leftTree = y;
+
+		if (y != NIL) {
+			y->parent = fa;
+		}
+		p->rightTree = fa;
+		fa->parent = p;
+
+		if (root == fa) {
+			root = p;
+		}
+		p->parent = gp;
+
+		if (gp != nullptr) {
+			if (gp->leftTree == fa) {
+				gp->leftTree = p;
+			}
+			else {
+				gp->rightTree = p;
+			}
+		}
 	}
-	T key;
 
-	Node *left, *right;
-};
+	void rotate_left(Node *p) {
+		if (p->parent == NULL) {
+			root = p;
+			return;
+		}
+		Node *gp = p->grandparent();
+		Node *fa = p->parent;
+		Node *y = p->leftTree;
 
-template <class _Ty>
-class BinaryBalanceTree
-{
-public:
-	BinaryBalanceTree() { root = 0; }
-	~BinaryBalanceTree() { clear(); }
-	void clear() { clear(root); root = 0; }
-	bool isEmpty() { return root == 0; }
-	void inorder() { inorder(root); }
-	void insert(const _Ty& el);
-	void visit(Node<_Ty> * p);
-	int height() { return height(root); }
-	void balance(_Ty data[], int first, int last);
-	void display() { display(root, 1); }
-	void moveDown(_Ty data[], int first, int last);
-	_Ty* search(const _Ty& el) const { return search(root, el); }
-	void deleteByMerging(Node<_Ty>*&);
-	void findAndDeleteByMerging(const _Ty&);
+		fa->rightTree = y;
 
-protected:
-	Node<_Ty> *root;
+		if (y != NIL) {
+			y->parent = fa;
+		}
+		p->leftTree = fa;
+		fa->parent = p;
 
-	void clear(Node<_Ty> *p);
-	void inorder(Node<_Ty> *p);
-	int largest(Node<_Ty> *p);
-	int height(Node<_Ty> *p);
-	void display(Node<_Ty> *ptr, int level);
-	_Ty* search(Node<_Ty>*, const _Ty&) const;
-};
+		if (root == fa) {
+			root = p;
+		}
+		p->parent = gp;
 
-template<class  _Ty>
-void BinaryBalanceTree<_Ty>::clear(Node<_Ty> *p)
-{
-	if (p != 0) {
-		clear(p->left);
-		clear(p->right);
+		if (gp != nullptr) {
+			if (gp->leftTree == fa)
+				gp->leftTree = p;
+			else
+				gp->rightTree = p;
+		}
+	}
+
+	void inorder(Node *p) {
+		if (p == NIL) {
+			return;
+		}
+
+		if (p->leftTree) {
+			inorder(p->leftTree);
+		}
+		// std::cout << p->value << " ";
+
+		if (p->rightTree) {
+			inorder(p->rightTree);
+		}
+	}
+
+	Node* getSmallestChild(Node *p) {
+		if (p->leftTree == NIL) {
+			return p;
+		}
+		return getSmallestChild(p->leftTree);
+	}
+
+	bool delete_child(Node *p, int data) {
+		if (p->value > data) {
+			if (p->leftTree == NIL) {
+				return false;
+			}
+			return delete_child(p->leftTree, data);
+		}
+
+		if (p->value < data) {
+			if (p->rightTree == NIL) {
+				return false;
+			}
+			return delete_child(p->rightTree, data);
+		}
+
+		if (p->rightTree == NIL) {
+			delete_one_child(p);
+			return true;
+		}
+		Node *smallest = getSmallestChild(p->rightTree);
+		swap(p->value, smallest->value);
+		delete_one_child(smallest);
+
+		return true;
+	}
+
+	void delete_one_child(Node *p) {
+		Node *child = p->leftTree == NIL ? p->rightTree : p->leftTree;
+		if (p->parent == NULL && p->leftTree == NIL && p->rightTree == NIL) {
+			p = NULL;
+			root = p;
+			return;
+		}
+
+		if (p->parent == NULL) {
+			delete  p;
+			child->parent = NULL;
+			root = child;
+			root->color = BLACK;
+			return;
+		}
+
+		if (p->parent->leftTree == p) {
+			p->parent->leftTree = child;
+		}
+		else {
+			p->parent->rightTree = child;
+		}
+		child->parent = p->parent;
+
+		if (p->color == BLACK) {
+			if (child->color == RED) {
+				child->color = BLACK;
+			}
+			else
+				delete_case(child);
+		}
+
 		delete p;
 	}
-}
 
-template<class  _Ty>
-void BinaryBalanceTree<_Ty>::inorder(Node<_Ty> *p) {
-	//TO DO! This is for an inorder tree traversal!
-
-	if (p != 0)
-	{
-		inorder(p->left);
-		visit(p);
-		inorder(p->right);
-	}
-
-}
-
-template<class _Ty>
-void BinaryBalanceTree<_Ty>::insert(const T &el) {
-	Node<_Ty> *p = root, *prev = 0;
-	while (p != 0) {
-		prev = p;
-		if (p->key < el)
-			p = p->right;
-		else
-			p = p->left;
-	}
-	if (root == 0)
-		root = new Node<_Ty>(el);
-	else if (prev->key<el)
-		prev->right = new Node<_Ty>(el);
-	else
-		prev->left = new Node<_Ty>(el);
-}
-
-
-template<class  _Ty>
-void BinaryBalanceTree<_Ty>::visit(Node<_Ty> * p) {
-	std::cout << p->key << ' ';
-	ar.push_back(p->key);
-}
-
-
-template<class  _Ty>
-int BinaryBalanceTree<_Ty>::height(Node<_Ty> *p) {
-	int left, right;
-
-	if (p == NULL)
-		return 0;
-	left = height(p->left);
-	right = height(p->right);
-	if (left > right)
-		return left + 1;
-	else
-		return right + 1;
-}
-
-template<class  _Ty>
-void BinaryBalanceTree<_Ty>::moveDown(T data[], int first, int last) {
-	int largest = 2 * first + 1;
-	while (largest <= last) {
-		if (largest < last && data[largest] < data[largest + 1])
-			largest++;
-		if (data[first] < data[largest]) {
-			swap(data[first], data[largest]);
-			first = largest;
-			largest = 2 * first + 1;
+	void delete_case(Node *p) {
+		if (p->parent == NULL) {
+			p->color = BLACK;
+			return;
 		}
-		else largest = last + 1;
-	}
-}
-
-template<class  _Ty>
-void BinaryBalanceTree<_Ty>::balance(T data[], int first, int last) {
-	if (first <= last) {
-		int middle = (first + last) / 2;
-		insert(data[middle]);
-		balance(data, first, middle - 1);
-		balance(data, middle + 1, last);
-	}
-
-}
-
-
-template<class  _Ty>
-void BinaryBalanceTree<_Ty>::display(Node<_Ty> *ptr, int level)
-{
-	int i;
-	if (ptr != NULL)
-	{
-		display(ptr->right, level + 1);
-		cout << endl;
-		if (ptr == root)
-			cout << "Root -> ";
-		for (i = 0; i < level && ptr != root; i++)
-			cout << "        ";
-		cout << ptr->key;
-		display(ptr->left, level + 1);
-	}
-}
-
-template<class  _Ty>
-_Ty* BinaryBalanceTree<_Ty>::search(Node<_Ty>* p, const T& el) const {
-	while (p != 0)
-		if (el == p->key)
-			return &p->key;
-		else if (el < p->key)
-			p = p->left;
-		else
-			p = p->right;
-	return 0;
-}
-
-
-template<class  _Ty>
-void BinaryBalanceTree<_Ty>::deleteByMerging(Node<_Ty>*& node) {
-	Node<_Ty> *tmp = node;
-	if (node != 0) {
-		if (!node->right)
-			node = node->left;
-		else if (node->left == 0) node = node->right;
+		if (p->sibling()->color == RED) {
+			p->parent->color = RED;
+			p->sibling()->color = BLACK;
+			if (p == p->parent->leftTree)
+				rotate_left(p->sibling());
+			else
+				rotate_right(p->sibling());
+		}
+		if (p->parent->color == BLACK && p->sibling()->color == BLACK
+			&& p->sibling()->leftTree->color == BLACK && p->sibling()->rightTree->color == BLACK) {
+			p->sibling()->color = RED;
+			delete_case(p->parent);
+		}
+		else if (p->parent->color == RED && p->sibling()->color == BLACK
+			&& p->sibling()->leftTree->color == BLACK && p->sibling()->rightTree->color == BLACK) {
+			p->sibling()->color = RED;
+			p->parent->color = BLACK;
+		}
 		else {
-			tmp = node->left;
-			while (tmp->right != 0)
-				tmp = tmp->right;
-			tmp->right =
-				node->right;
-			tmp = node;
-			node = node->left;
+			if (p->sibling()->color == BLACK) {
+				if (p == p->parent->leftTree && p->sibling()->leftTree->color == RED
+					&& p->sibling()->rightTree->color == BLACK) {
+					p->sibling()->color = RED;
+					p->sibling()->leftTree->color = BLACK;
+					rotate_right(p->sibling()->leftTree);
+				}
+				else if (p == p->parent->rightTree && p->sibling()->leftTree->color == BLACK
+					&& p->sibling()->rightTree->color == RED) {
+					p->sibling()->color = RED;
+					p->sibling()->rightTree->color = BLACK;
+					rotate_left(p->sibling()->rightTree);
+				}
+			}
+			p->sibling()->color = p->parent->color;
+			p->parent->color = BLACK;
+			if (p == p->parent->leftTree) {
+				p->sibling()->rightTree->color = BLACK;
+				rotate_left(p->sibling());
+			}
+			else {
+				p->sibling()->leftTree->color = BLACK;
+				rotate_right(p->sibling());
+			}
 		}
-		delete tmp;
 	}
-}
 
-template<class  _Ty>
-void BinaryBalanceTree<_Ty>::findAndDeleteByMerging(const T& el) {
-	Node<_Ty> *node = root, *prev = 0;
-	while (node != 0) {
-		if (node->key == el)
-			break;
-		prev = node;
-		if (el < node->key)
-			node = node->left;
-		else node = node->right;
+	void insert(Node *p, int data) {
+		if (p->value >= data) {
+			if (p->leftTree != NIL)
+				insert(p->leftTree, data);
+			else {
+				Node *tmp = new Node();
+				tmp->value = data;
+				tmp->leftTree = tmp->rightTree = NIL;
+				tmp->parent = p;
+				p->leftTree = tmp;
+				insert_case(tmp);
+			}
+		}
+		else {
+			if (p->rightTree != NIL)
+				insert(p->rightTree, data);
+			else {
+				Node *tmp = new Node();
+				tmp->value = data;
+				tmp->leftTree = tmp->rightTree = NIL;
+				tmp->parent = p;
+				p->rightTree = tmp;
+				insert_case(tmp);
+			}
+		}
 	}
-	if (node != 0 && node->key == el)
-		if (node == root)
-			deleteByMerging(root);
-		else if (prev->left == node)
-			deleteByMerging(prev->left);
-		else deleteByMerging(prev->right);
-	else if (root != 0)
-		cout << "element" << el << "is not in the tree\n";
-	else cout << "the tree is empty\n";
-}
+
+	void insert_case(Node *p) {
+		if (p->parent == nullptr) {
+			root = p;
+			p->color = BLACK;
+			return;
+		}
+		if (p->parent->color == RED) {
+			if (p->uncle()->color == RED) {
+				p->parent->color = p->uncle()->color = BLACK;
+				p->grandparent()->color = RED;
+				insert_case(p->grandparent());
+			}
+			else {
+				if (p->parent->rightTree == p && p->grandparent()->leftTree == p->parent) {
+					rotate_left(p);
+					rotate_right(p);
+					p->color = BLACK;
+					p->leftTree->color = p->rightTree->color = RED;
+				}
+				else if (p->parent->leftTree == p && p->grandparent()->rightTree == p->parent) {
+					rotate_right(p);
+					rotate_left(p);
+					p->color = BLACK;
+					p->leftTree->color = p->rightTree->color = RED;
+				}
+				else if (p->parent->leftTree == p && p->grandparent()->leftTree == p->parent) {
+					p->parent->color = BLACK;
+					p->grandparent()->color = RED;
+					rotate_right(p->parent);
+				}
+				else if (p->parent->rightTree == p && p->grandparent()->rightTree == p->parent) {
+					p->parent->color = BLACK;
+					p->grandparent()->color = RED;
+					rotate_left(p->parent);
+				}
+			}
+		}
+	}
+
+	void DeleteTree(Node *p) {
+		if (!p || p == NIL) {
+			return;
+		}
+		DeleteTree(p->leftTree);
+		DeleteTree(p->rightTree);
+		delete p;
+	}
+
+public:
+
+	Status() {
+		NIL = new Node();
+		NIL->color = BLACK;
+		root = NULL;
+	}
+
+	~Status() {
+		if (root) {
+			DeleteTree(root);
+		}
+		delete NIL;
+	}
+
+	void inorder() {
+		if (root == nullptr) {
+			return;
+		}
+		inorder(root);
+	}
+
+	void insert(int x) {
+		if (root == nullptr) {
+			root = new Node();
+			root->color = BLACK;
+			root->leftTree = root->rightTree = NIL;
+			root->value = x;
+		}
+		else {
+			insert(root, x);
+		}
+	}
+
+	bool delete_value(int data) {
+		return delete_child(root, data);
+	}
+};
 
 } // namespace geo
 

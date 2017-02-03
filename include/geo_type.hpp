@@ -272,6 +272,58 @@ public:
 	}
 };
 
+template <typename _Tp> class LineSegmentT
+{
+public:
+	_Tp x_start;
+	_Tp x_end;
+
+	// Ax + By + C = 0
+	_Tp A, B, C;
+
+	LineSegmentT(_Tp x_start, _Tp x_end, _Tp A, _Tp B, _Tp C = 0)
+		: x_start(x_start)
+		, x_end(x_end)
+		, A(A)
+		, B(B)
+		, C(C)
+	{
+		assert((x_end > x_start) && (0 != A || 0 != B));
+	}
+
+	bool isOverlap(_Tp x, _Tp y)
+	{
+		if (x < x_start || x > x_end)
+		{
+			return false;
+		}
+
+		_Tp value = A * x + B * y + C;
+		
+		return 0 == value ? true : false;
+	}
+
+	_Tp y(_Tp x)
+	{
+		if (0 == B)
+		{
+			return NAN;
+		}
+
+		return -(A * x + C) / B;
+	}
+
+	_Tp x(_Tp y)
+	{
+		if (0 == A)
+		{
+			return NAN;
+		}
+
+		return -(B * x + C) / A;
+	}
+};
+
 } // namespace geo
 
 #endif /* GEO_TYPE_HPP */
