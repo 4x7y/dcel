@@ -1,0 +1,14 @@
+language: cpp
+sudo: required
+dist: trusty
+compiler:
+  - g++
+os:
+  - linux
+before_install:
+  - sudo apt-get install libopencv-dev
+
+  cript:
+  - mkdir build
+  - cd build
+  - ${DEPS_DIR}/cmake/bin/cmake .. && make
