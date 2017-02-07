@@ -15,13 +15,13 @@ public:
 		, y(y)
 	{ }
 
-	bool operator < (const Point2_ &p2);
+	bool operator< (Point2_ const& p2) const;
 };
 
 template <typename _Tp>
-bool Point2_<_Tp> :: operator < (const Point2_<_Tp> &p2)
+bool Point2_<_Tp>::operator< (Point2_<_Tp> const& p2) const
 {
-	return (x < p2.x) || (x == p2.x && y < p2.y);
+	return ((x < p2.x) || ((x==p2.x) && (y<p2.y)));
 }
 
 typedef Point2_<double> Point2d;
@@ -55,11 +55,11 @@ public:
 		, z(z)
 	{ }
 
-	bool operator < (const Point3_ &p2);
+	bool operator< (Point3_ const& p2);
 };
 
 template<typename _Tp>
-bool Point3_<_Tp>::operator < (const Point3_<_Tp> &p2)
+bool Point3_<_Tp>::operator< (Point3_<_Tp> const& p2)
 {
 	return  (x < p2.x) ||
 		(x == p2.x && y < p2.y) ||

@@ -1,11 +1,7 @@
 cmake_minimum_required(VERSION 3.2)
 project(ComputionalGeometry)
 
-find_package( OpenCV 3 REQUIRED )
-
-#set(CMAKE_PREFIX_PATH "/usr/local/opt/opencv3/share/OpenCV")
-#set(OpenCV_INCLUDE_DIRS "/usr/local/opt/opencv3/include")
-#set(OpenCV_LIBS "/usr/local/opt/opencv3/lib")
+find_package( OpenCV REQUIRED )
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
@@ -22,3 +18,4 @@ include_directories( ${OpenCV_INCLUDE_DIRS} )
 include_directories( include )
 
 add_executable(ComputionalGeometry ${SOURCE_FILES})
+TARGET_LINK_LIBRARIES(ComputionalGeometry ${OpenCV_LIBS} )
