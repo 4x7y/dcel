@@ -101,6 +101,30 @@ void lineIntersect(const std::vector<geo::Edge2i>& seg, std::vector<geo::Point2i
 	std::map<uint, geo::Edge2i>	status;
 }
 
+class A
+{
+public:
+	int value;
+
+	A(int t) : value(t) {}
+	A() = default;
+
+	friend std::ostream& operator<< (std::ostream& os, const A& a);
+};
+
+std::ostream& operator<< (std::ostream& os, const A& a)
+{
+	os << a.value;
+
+	return os;
+}
+
+bool less(const A& left, const A& right)
+{
+	return left.value < right.value;
+}
+
+
 int main(int argc, const char * argv[])
 {
 	// DCEL Test
@@ -109,19 +133,21 @@ int main(int argc, const char * argv[])
 	delete dcel;
 
 	// Status Tree Test
-	geo::RBTree<int> tree;
-	tree.insert(15);
-	tree.insert(5);
-	tree.insert(10);
-	tree.insert(25);
-	tree.inorder();
+	geo::RBTree<A> tree([](const A& left, const A& right)
+	{
+		return left.value < right.value;
+	});
+	tree.insert(A(15));
+	tree.insert(A(16));	
+	tree.insert(A(5));	
+	tree.insert(A(25));
 	std::cout << std::endl;
 
 	for (int i = 0; i <= 32; i += 4)
 	{
-		int smaller, larger;
+		A smaller, larger;
 
-		if (tree.get_smaller(i, smaller))
+		if (tree.get_smaller(A(i), smaller))
 		{
 			std::cout << i << " is larger than " << smaller << std::endl;
 		}

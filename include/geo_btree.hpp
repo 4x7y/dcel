@@ -7,10 +7,11 @@
 namespace geo
 {
 
-template<class ValueT>
+template<typename ValueT>
 class RBTree
 {
 	typedef enum { RED, BLACK } Color;
+	typedef bool(*comp_func)(const ValueT&, const ValueT&);
 
 	struct Node {
 		ValueT				value;
@@ -55,6 +56,7 @@ class RBTree
 private:
 
 	Node *root, *NIL;
+	comp_func less;
 
 	void rotate_right(Node* p) {
 		Node *gp = p->grandparent();
@@ -137,14 +139,14 @@ private:
 	}
 
 	bool delete_child(Node *p, int data) {
-		if (p->value > data) {
+		if (less(data, p->value)) {
 			if (p->leftTree == NIL) {
 				return false;
 			}
 			return delete_child(p->leftTree, data);
 		}
 
-		if (p->value < data) {
+		if (less(p->value, data)) {
 			if (p->rightTree == NIL) {
 				return false;
 			}
@@ -249,7 +251,7 @@ private:
 	}
 
 	void insert(Node *p, const ValueT& data) {
-		if (p->value >= data) {
+		if (!less (p->value, data)) {
 			if (p->leftTree != NIL)
 				insert(p->leftTree, data);
 			else {
@@ -326,7 +328,7 @@ private:
 
 	Node* get_smaller(Node* p, const ValueT& value)
 	{
-		if (value < p->value)
+		if (less(value, p->value))
 		{
 			if (p->leftTree == NIL)
 			{
@@ -336,7 +338,7 @@ private:
 			return get_smaller(p->leftTree, value);
 		}
 		
-		if (value > p->value)
+		if (less(p->value, value))
 		{
 			if (p->rightTree == NIL)
 			{
@@ -357,7 +359,7 @@ private:
 
 	Node* get_larger(Node* p, const ValueT& value)
 	{
-		if (value < p->value)
+		if (less(value, p->value))
 		{
 			if (p->leftTree == NIL)
 			{
@@ -373,7 +375,7 @@ private:
 			return pl;
 		}
 
-		if (value > p->value)
+		if (less(p->value, value))
 		{
 			if (p->rightTree == NIL)
 			{
@@ -386,23 +388,26 @@ private:
 		return p;
 	}
 
-
 public:
 
-	RBTree() {
-		NIL = new Node();
-		NIL->color = BLACK;
-		root = NULL;
+	RBTree(comp_func less = nullptr)
+	{
+		NIL          = new Node();
+		NIL->color   = BLACK;
+		root         = nullptr;
+		this->less	 = less;
 	}
 
-	~RBTree() {
+	~RBTree() 
+	{
 		if (root) {
 			delete_tree(root);
 		}
 		delete NIL;
 	}
 
-	void inorder() {
+	void inorder() 
+	{
 		if (root == nullptr) {
 			return;
 		}
@@ -449,6 +454,23 @@ public:
 
 		larger = p->value;
 		return true;
+	}
+};
+
+
+template<class LineT, class PointT>
+class Status
+{
+	RBTree<LineT *>* m_pRBTree;
+
+public:
+
+	Status() {
+		m_pRBTree = new RBTree<LineT*>();
+	};
+
+	~Status() {
+		delete m_pRBTree;
 	}
 };
 
