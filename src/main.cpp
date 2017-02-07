@@ -151,7 +151,7 @@ int main(int argc, const char * argv[])
 	
 	// Test Function
 	std::vector<geo::Edge2i> edges;
-	convexHull(points, edges);
+	//convexHull(points, edges);
 	
 	// Visualization
 	for (auto point : points)

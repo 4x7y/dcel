@@ -166,7 +166,7 @@ public:
 			return NAN;
 		}
 
-		return -(B * x + C) / A;
+		return -(B * y + C) / A;
 	}
 };
 

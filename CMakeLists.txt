@@ -1,20 +1,24 @@
-cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
-project (ComputationalGeometry)
-find_package( OpenCV REQUIRED )
+cmake_minimum_required(VERSION 3.5)
+project(ComputionalGeometry)
 
-include_directories(include)
+find_package( OpenCV 3 REQUIRED )
 
-add_compile_options(-std=c++11)
+#set(CMAKE_PREFIX_PATH "/usr/local/opt/opencv3/share/OpenCV")
+#set(OpenCV_INCLUDE_DIRS "/usr/local/opt/opencv3/include")
+#set(OpenCV_LIBS "/usr/local/opt/opencv3/lib")
 
-add_executable(ComputationalGeometry
-	src/main.cpp
-	include/geo_convex_hull.hpp
-	include/geo_intersection.hpp
-	include/geo_triangulation.hpp
-	include/geo_dcel.hpp
-	include/geo_status.hpp
-	include/geo_type.hpp)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
+set(SOURCE_FILES
+    include/geo_convex_hull.hpp
+    include/geo_dcel.hpp
+    include/geo_intersection.hpp
+    include/geo_status.hpp
+    include/geo_triangulation.hpp
+    include/geo_type.hpp
+    src/main.cpp)
 
-target_link_libraries( ComputationalGeometry ${OpenCV_LIBS} )
-# target_compile_features( ComputationalGeometry PRIVATE cxx_range_for)
+include_directories( ${OpenCV_INCLUDE_DIRS} )
+include_directories( include )
+
+add_executable(ComputionalGeometry ${SOURCE_FILES})

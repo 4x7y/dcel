@@ -9,7 +9,7 @@
 
 namespace geo
 {
-template <typename T>
+/*template <typename T>
 int convexHull(const    std::vector<Point2_<T> >& points,
 	std::vector<Edge2_<T> >&  edges)
 {
@@ -22,7 +22,7 @@ int convexHull(const    std::vector<Point2_<T> >& points,
 	}
 
 	return 0;
-}
+}*/
 } // namespace geo
 
 #endif /* GEO_CONVEX_HULL_HPP */
