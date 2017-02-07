@@ -272,7 +272,7 @@ public:
 	}
 };
 
-template <typename _Tp> class LineSegmentT
+template <typename _Tp> class LineSegment
 {
 public:
 	_Tp x_start;
@@ -281,14 +281,16 @@ public:
 	// Ax + By + C = 0
 	_Tp A, B, C;
 
-	LineSegmentT(_Tp x_start, _Tp x_end, _Tp A, _Tp B, _Tp C = 0)
+	LineSegment(_Tp x_start, _Tp x_end, _Tp A, _Tp B, _Tp C = 0)
 		: x_start(x_start)
 		, x_end(x_end)
-		, A(A)
-		, B(B)
-		, C(C)
 	{
 		assert((x_end > x_start) && (0 != A || 0 != B));
+
+		if (A >= 0)
+		{
+			
+		}
 	}
 
 	bool isOverlap(_Tp x, _Tp y)

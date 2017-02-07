@@ -2,11 +2,13 @@
 #include <opencv2/opencv.hpp>
 
 #include "geo_type.hpp"
+#include "geo_btree.hpp"
 #include "geo_convex_hull.hpp"
 
 #include <vector>
 #include <queue>
 #include <fstream>
+
 
 const uint WIN_WIDTH  = 512;
 const uint WIN_HEIGHT = 512;
@@ -105,6 +107,39 @@ int main(int argc, const char * argv[])
 	auto dcel = new geo::DCEL<VertexData, EdgeData, FaceData>();
 	generateDCEL(*dcel);
 	delete dcel;
+
+	// Status Tree Test
+	geo::RBTree<int> tree;
+	tree.insert(15);
+	tree.insert(5);
+	tree.insert(10);
+	tree.insert(25);
+	tree.inorder();
+	std::cout << std::endl;
+
+	for (int i = 0; i <= 32; i += 4)
+	{
+		int smaller, larger;
+
+		if (tree.get_smaller(i, smaller))
+		{
+			std::cout << i << " is larger than " << smaller << std::endl;
+		}
+		else
+		{
+			std::cout << i << " is the smallest." << std::endl;
+		}
+		
+		if (tree.get_larger(i, larger))
+		{
+			std::cout << i << " is smaller than " << larger << std::endl;
+		}
+		else
+		{
+			std::cout << i << " is the largest." << std::endl;
+		}
+	}
+
 
 	// Initialization
 	cv::RNG rng;

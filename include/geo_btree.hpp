@@ -1,28 +1,30 @@
 #ifndef GEO_BTREE_HPP
 #define GEO_BTREE_HPP
 
+#include <utility>
+#include <iostream>
+
 namespace geo
 {
 
-template<class _Tp>
-class Status
+template<class ValueT>
+class RBTree
 {
 	typedef enum { RED, BLACK } Color;
 
 	struct Node {
-		_Tp*				value;
+		ValueT				value;
 		Color				color;
 		Node				*leftTree, *rightTree, *parent;
 
 		Node()
-			: value(nullptr)
-			, color(RED)
+			: color(RED)
 			, leftTree(nullptr)
 			, rightTree(nullptr)
 			, parent(nullptr)
 		{}
 
-		Node* grandParent()
+		Node* grandparent() const
 		{
 			if (parent == nullptr) {
 				return nullptr;
@@ -30,16 +32,16 @@ class Status
 			return parent->parent;
 		}
 
-		Node* uncle()
+		Node* uncle() const
 		{
-			if (grandParent() == nullptr) {
+			if (grandparent() == nullptr) {
 				return nullptr;
 			}
 
-			if (parent == grandParent()->rightTree) {
-				return grandParent()->leftTree;
+			if (parent == grandparent()->rightTree) {
+				return grandparent()->leftTree;
 			}
-			return grandParent()->rightTree;
+			return grandparent()->rightTree;
 		}
 
 		Node* sibling() {
@@ -54,7 +56,7 @@ private:
 
 	Node *root, *NIL;
 
-	void rotateRight(Node* p) {
+	void rotate_right(Node* p) {
 		Node *gp = p->grandparent();
 		Node *fa = p->parent;
 		Node *y  = p->rightTree;
@@ -83,7 +85,7 @@ private:
 	}
 
 	void rotate_left(Node *p) {
-		if (p->parent == NULL) {
+		if (p->parent == nullptr) {
 			root = p;
 			return;
 		}
@@ -112,7 +114,7 @@ private:
 		}
 	}
 
-	void inorder(Node *p) {
+	void inorder(Node *p) const {
 		if (p == NIL) {
 			return;
 		}
@@ -120,18 +122,18 @@ private:
 		if (p->leftTree) {
 			inorder(p->leftTree);
 		}
-		// std::cout << p->value << " ";
+		std::cout << p->value << " ";
 
 		if (p->rightTree) {
 			inorder(p->rightTree);
 		}
 	}
 
-	Node* getSmallestChild(Node *p) {
+	Node* get_smallest_child(Node *p) const {
 		if (p->leftTree == NIL) {
 			return p;
 		}
-		return getSmallestChild(p->leftTree);
+		return get_smallest_child(p->leftTree);
 	}
 
 	bool delete_child(Node *p, int data) {
@@ -154,7 +156,7 @@ private:
 			return true;
 		}
 		Node *smallest = getSmallestChild(p->rightTree);
-		swap(p->value, smallest->value);
+		std::swap(p->value, smallest->value);
 		delete_one_child(smallest);
 
 		return true;
@@ -246,7 +248,7 @@ private:
 		}
 	}
 
-	void insert(Node *p, int data) {
+	void insert(Node *p, const ValueT& data) {
 		if (p->value >= data) {
 			if (p->leftTree != NIL)
 				insert(p->leftTree, data);
@@ -312,26 +314,90 @@ private:
 		}
 	}
 
-	void DeleteTree(Node *p) {
+	void delete_tree(Node *p) {
 		if (!p || p == NIL) {
 			return;
 		}
-		DeleteTree(p->leftTree);
-		DeleteTree(p->rightTree);
+		delete_tree(p->leftTree);
+		delete_tree(p->rightTree);
 		delete p;
 	}
 
+
+	Node* get_smaller(Node* p, const ValueT& value)
+	{
+		if (value < p->value)
+		{
+			if (p->leftTree == NIL)
+			{
+				return nullptr;
+			}
+			
+			return get_smaller(p->leftTree, value);
+		}
+		
+		if (value > p->value)
+		{
+			if (p->rightTree == NIL)
+			{
+				return p;
+			}
+
+			Node* ps = get_smaller(p->rightTree, value);
+			if (ps == nullptr)
+			{
+				return p;
+			}
+
+			return ps;
+		}
+
+		return p;
+	}
+
+	Node* get_larger(Node* p, const ValueT& value)
+	{
+		if (value < p->value)
+		{
+			if (p->leftTree == NIL)
+			{
+				return p;
+			}
+
+			Node* pl = get_larger(p->leftTree, value);
+			if (pl == nullptr)
+			{
+				return p;
+			}
+
+			return pl;
+		}
+
+		if (value > p->value)
+		{
+			if (p->rightTree == NIL)
+			{
+				return nullptr;
+			}
+
+			return get_larger(p->rightTree, value);
+		}
+
+		return p;
+	}
+
+
 public:
 
-	Status() {
+	RBTree() {
 		NIL = new Node();
 		NIL->color = BLACK;
 		root = NULL;
 	}
 
-	~Status() {
+	~RBTree() {
 		if (root) {
-			DeleteTree(root);
+			delete_tree(root);
 		}
 		delete NIL;
 	}
@@ -343,7 +409,7 @@ public:
 		inorder(root);
 	}
 
-	void insert(int x) {
+	void insert(const ValueT& x) {
 		if (root == nullptr) {
 			root = new Node();
 			root->color = BLACK;
@@ -357,6 +423,32 @@ public:
 
 	bool delete_value(int data) {
 		return delete_child(root, data);
+	}
+
+	bool get_smaller(const ValueT& value, ValueT& smaller)
+	{
+		Node* p = get_smaller(root, value);
+
+		if (p == nullptr)
+		{
+			return false;
+		}
+
+		smaller = p->value;
+		return true;
+	}
+
+	bool get_larger(const ValueT& value, ValueT& larger)
+	{
+		Node* p = get_larger(root, value);
+
+		if (p == nullptr)
+		{
+			return false;
+		}
+
+		larger = p->value;
+		return true;
 	}
 };
 
