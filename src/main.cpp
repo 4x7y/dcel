@@ -2,7 +2,8 @@
 #include <opencv2/opencv.hpp>
 
 #include "geo_type.hpp"
-#include "geo_btree.hpp"
+#include "geo_status.hpp"
+#include "geo_dcel.hpp"
 #include "geo_convex_hull.hpp"
 
 #include <vector>

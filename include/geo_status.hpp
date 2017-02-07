@@ -1,5 +1,5 @@
-#ifndef GEO_BTREE_HPP
-#define GEO_BTREE_HPP
+#ifndef GEO_STATUS_HPP
+#define GEO_STATUS_HPP
 
 #include <utility>
 #include <iostream>
@@ -477,4 +477,4 @@ public:
 } // namespace geo
 
 
-#endif /* GEO_BTREE_HPP */
+#endif /* GEO_STATUS_HPP */
