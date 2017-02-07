@@ -120,12 +120,6 @@ std::ostream& operator<< (std::ostream& os, const A& a)
 	return os;
 }
 
-bool less(const A& left, const A& right)
-{
-	return left.value < right.value;
-}
-
-
 int main(int argc, const char * argv[])
 {
 	// DCEL Test
@@ -133,40 +127,17 @@ int main(int argc, const char * argv[])
 	generateDCEL(*dcel);
 	delete dcel;
 
-	// Status Tree Test
-	geo::RBTree<A> tree([](const A& left, const A& right)
-	{
-		return left.value < right.value;
-	});
-	tree.insert(A(15));
-	tree.insert(A(16));	
-	tree.insert(A(5));	
-	tree.insert(A(25));
-	std::cout << std::endl;
-
-	for (int i = 0; i <= 32; i += 4)
-	{
-		A smaller, larger;
-
-		if (tree.get_smaller(A(i), smaller))
-		{
-			std::cout << i << " is larger than " << smaller << std::endl;
-		}
-		else
-		{
-			std::cout << i << " is the smallest." << std::endl;
-		}
-		
-		if (tree.get_larger(i, larger))
-		{
-			std::cout << i << " is smaller than " << larger << std::endl;
-		}
-		else
-		{
-			std::cout << i << " is the largest." << std::endl;
-		}
-	}
-
+	// Status Struct Test
+	typedef geo::LineSegment<float>* LinePtr;
+	typedef geo::Point2_<float>*	 PointPtr;
+	geo::Status<LinePtr, PointPtr, float>	 status;
+	geo::LineSegment<float> l1(-2, 2, 1, 2, 3), l2(-2, 4, 2, 1, 3);
+	
+	// Must update x before insert
+	status.set_x(0.5);
+	status.insert(&l1);
+	status.insert(&l2);
+	
 
 	// Initialization
 	cv::RNG rng;

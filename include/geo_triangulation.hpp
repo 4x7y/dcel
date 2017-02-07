@@ -3,7 +3,8 @@
 
 #include <queue>
 #include "geo_type.hpp"
-#include "geo_btree.hpp"
+#include "geo_status.hpp"
+#include "geo_dcel.hpp"
 
 namespace geo
 {
@@ -12,7 +13,7 @@ template <class VertexDataT, class EdgeDataT, class FaceDataT>
 int PolygonTriangulation(DCEL<VertexDataT, EdgeDataT, FaceDataT> polygon)
 {
 	std::priority_queue<VertexT<VertexDataT, EdgeDataT, FaceDataT>> event_queue;
-	BinaryBalanceTree<HalfEdgeT<VertexDataT, EdgeDataT, FaceDataT>> status;
+	Status<HalfEdgeT<VertexDataT, EdgeDataT, FaceDataT>> status;
 
 
 

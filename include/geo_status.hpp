@@ -7,7 +7,7 @@
 namespace geo
 {
 
-template<typename ValueT>
+template<typename ValueT, class Compare>
 class RBTree
 {
 	typedef enum { RED, BLACK } Color;
@@ -56,7 +56,12 @@ class RBTree
 private:
 
 	Node *root, *NIL;
-	comp_func less;
+	Compare* comp;
+
+	bool less(ValueT& left, ValueT& right)
+	{
+		return comp->less(left, right);
+	}
 
 	void rotate_right(Node* p) {
 		Node *gp = p->grandparent();
@@ -250,7 +255,7 @@ private:
 		}
 	}
 
-	void insert(Node *p, const ValueT& data) {
+	void insert(Node *p, ValueT& data) {
 		if (!less (p->value, data)) {
 			if (p->leftTree != NIL)
 				insert(p->leftTree, data);
@@ -390,12 +395,12 @@ private:
 
 public:
 
-	RBTree(comp_func less = nullptr)
+	RBTree(Compare* cmp = nullptr)
 	{
 		NIL          = new Node();
 		NIL->color   = BLACK;
 		root         = nullptr;
-		this->less	 = less;
+		this->comp	 = cmp;
 	}
 
 	~RBTree() 
@@ -414,7 +419,7 @@ public:
 		inorder(root);
 	}
 
-	void insert(const ValueT& x) {
+	void insert(ValueT& x) {
 		if (root == nullptr) {
 			root = new Node();
 			root->color = BLACK;
@@ -457,22 +462,55 @@ public:
 	}
 };
 
-
-template<class LineT, class PointT>
+template<typename LinePtr, typename PointPtr, typename _Tp>
 class Status
 {
-	RBTree<LineT *>* m_pRBTree;
+	typedef RBTree<LinePtr, Status<LinePtr, PointPtr, _Tp>> Tree;
+		
+	Tree*	m_tree;
+	_Tp		m_curr_x;
+
+	bool isUpperPoint(const PointPtr& point, const LinePtr& line) const
+	{
+		if (point->y > line->y(m_curr_x))
+		{
+			return true;
+		}
+
+		return false;
+	}
 
 public:
 
+	bool less(LinePtr& line1, LinePtr& line2)
+	{
+		if (line1->y(m_curr_x) < line2->y(m_curr_x))
+		{
+			return true;
+		};
+
+		return false;
+	}
+	
 	Status() {
-		m_pRBTree = new RBTree<LineT*>();
+		m_tree = new Tree(this);
 	};
 
 	~Status() {
-		delete m_pRBTree;
+		delete m_tree;
+	}
+
+	void insert(LinePtr line)
+	{
+		m_tree->insert(line);
+	}
+
+	void set_x(_Tp x)
+	{
+		m_curr_x = x;
 	}
 };
+
 
 } // namespace geo
 
