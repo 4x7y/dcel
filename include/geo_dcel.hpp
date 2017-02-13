@@ -2,6 +2,9 @@
 #define GEO_DCEL_HPP
 
 #include <list>
+#include <vector>
+
+#include "geo_vector2.hpp"
 
 namespace geo
 {
@@ -161,12 +164,31 @@ namespace geo
 }
 
 
+namespace geo
+{
+class DoubleEdgeListFace;
+class DoubleEdgeListHalfEdge;
+class DoubleEdgeListVertex;
 
 class DoubleEdgeList
 {
 public:
-	DoubleEdgeList();
+	std::list<DoubleEdgeListVertex *>	vertices;
+	std::list<DoubleEdgeListHalfEdge *>	edges;
+	std::list<DoubleEdgeListFace *>		faces;
+
+	DoubleEdgeList(const std::vector<Vector2>& points);
 	~DoubleEdgeList();
+
+	void initialize(const std::vector<Vector2>& points);
+	void addHalfEdges(int i, int j);
+	void addHalfEdges(DoubleEdgeListVertex* v1, DoubleEdgeListVertex* v2);
+	void removeHalfEdges(int index);
+	void removeHalfEdges(DoubleEdgeListHalfEdge* edge);
+	static DoubleEdgeListHalfEdge*	getPreviousEdge(DoubleEdgeListVertex* vertex, DoubleEdgeListFace* face);
+	static DoubleEdgeListFace*		getReferenceFace(DoubleEdgeListVertex* v1, DoubleEdgeListVertex* v2);
 };
+
+}
 
 #endif /* GEO_DCEL_HPP */

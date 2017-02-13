@@ -150,7 +150,12 @@ void	Vector2::substract(const Vector2& vector)
 
 bool	Vector2::isZero() const
 {
-	
+	if (x == 0 && y == 0)
+	{
+		return true;
+	}
+
+	return false;
 }
 
 double  Vector2::cross(double x, double y) const
@@ -160,7 +165,7 @@ double  Vector2::cross(double x, double y) const
 
 double  Vector2::cross(const Vector2& vector) const
 {
-	
+	return this->x * vector.y - this->y * vector.x;
 }
 
 Vector2 Vector2::operator+ (const Vector2& vector) const

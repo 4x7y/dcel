@@ -1,4 +1,5 @@
 #include "geo_dcel_vertex.hpp"
+#include "geo_dcel_halfedge.hpp"
 
 namespace geo
 {

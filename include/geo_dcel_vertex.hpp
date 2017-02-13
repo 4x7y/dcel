@@ -2,10 +2,10 @@
 #define GEO_DCEL_VERTEX_HPP
 
 #include "geo_vector2.hpp"
-#include "geo_dcel_halfedge.hpp"
 
 namespace geo
 {
+class DoubleEdgeListHalfEdge;
 
 class DoubleEdgeListVertex
 {

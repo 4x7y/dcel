@@ -1,10 +1,9 @@
 #ifndef GEO_DCEL_FACE_HPP
 #define GEO_DCEL_FACE_HPP
 
-#include "geo_dcel_halfedge.hpp"
-
 namespace geo
 {
+class DoubleEdgeListHalfEdge;
 
 class DoubleEdgeListFace
 {
