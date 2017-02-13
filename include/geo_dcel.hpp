@@ -160,4 +160,13 @@ namespace geo
 	};
 }
 
+
+
+class DoubleEdgeList
+{
+public:
+	DoubleEdgeList();
+	~DoubleEdgeList();
+};
+
 #endif /* GEO_DCEL_HPP */
