@@ -101,8 +101,6 @@ namespace geo
 
 	};
 
-	
-
 } // namespace geo
 
 #endif /* GEO_VECTOR2_HPP */

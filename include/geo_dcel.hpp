@@ -185,6 +185,7 @@ public:
 	void addHalfEdges(DoubleEdgeListVertex* v1, DoubleEdgeListVertex* v2);
 	void removeHalfEdges(int index);
 	void removeHalfEdges(DoubleEdgeListHalfEdge* edge);
+
 	static DoubleEdgeListHalfEdge*	getPreviousEdge(DoubleEdgeListVertex* vertex, DoubleEdgeListFace* face);
 	static DoubleEdgeListFace*		getReferenceFace(DoubleEdgeListVertex* v1, DoubleEdgeListVertex* v2);
 };

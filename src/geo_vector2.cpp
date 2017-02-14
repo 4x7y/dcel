@@ -1,4 +1,5 @@
 #include "geo_vector2.hpp"
+#include "geo_epsilon.hpp"
 
 namespace geo
 {
@@ -150,7 +151,7 @@ void	Vector2::substract(const Vector2& vector)
 
 bool	Vector2::isZero() const
 {
-	if (x == 0 && y == 0)
+	if (x < Epsilon::E && y < Epsilon::E)
 	{
 		return true;
 	}

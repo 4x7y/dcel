@@ -4,6 +4,13 @@
 namespace geo
 {
 
+typedef enum
+{
+	GEO_SUCCESS          =  0,
+	GEO_FAILURE          = -1,
+	GEO_NOT_ENOUGH_POINT = -2
+} GEO_RESULT;
+
 // 2 Dimension Point
 template <typename _Tp> class Point2_
 {

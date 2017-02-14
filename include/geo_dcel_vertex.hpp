@@ -17,7 +17,6 @@ public:
 	/* The leaving edge */
 	DoubleEdgeListHalfEdge* leaving;
 
-
 	DoubleEdgeListVertex(const Vector2& point);
 
 	DoubleEdgeListHalfEdge* getEdgeTo(DoubleEdgeListVertex* node) const;

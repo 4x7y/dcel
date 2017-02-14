@@ -8,8 +8,10 @@ namespace geo
 
 class SweepLineState
 {
+public:
+	DoubleEdgeList* dcel;
 
-	DoubleEdgeList dcel;
+
 	
 };
 
