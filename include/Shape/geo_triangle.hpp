@@ -1,8 +1,8 @@
 #ifndef GEO_TRIANGLE_HPP
 #define GEO_TRIANGLE_HPP
 
-#include <geo_vector2.hpp>
-#include <Shape/geo_polygon.hpp>
+#include "geo_vector2.hpp"
+#include "Shape/geo_polygon.hpp"
 
 namespace geo
 {

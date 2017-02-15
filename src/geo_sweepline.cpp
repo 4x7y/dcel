@@ -1,7 +1,9 @@
 #include "geo_sweepline.hpp"
 #include "geo_dcel_halfedge.hpp"
 #include "geo_sweepline_state.hpp"
+#include "geo_vector2.hpp"
 #include <queue>
+
 
 
 namespace geo
@@ -15,12 +17,19 @@ SweepLine::~SweepLine()
 {
 }
 
-GEO_RESULT SweepLine::createTriangulation(const std::vector<Vector2> points, DoubleEdgeList& dcel) const
+GEO_RESULT SweepLine::createTriangulation(const std::vector<Vector2>& points, DoubleEdgeList& dcel) const
 {
 	if (points.size() < 4)
 	{
-		return GEO_NOT_ENOUGH_POINT;
+		return GEO_RESULT::INSUFFICIENT_POINTS;
 	}
+
+	SweepLineState sweepstate;
+
+	std::priority_queue<Vector2> queue;
+	
+	sweepstate.initialize(points, queue);
+
 
 
 	//// get the winding order
@@ -67,7 +76,7 @@ GEO_RESULT SweepLine::createTriangulation(const std::vector<Vector2> points, Dou
 	//// return the triangulation
 	//return sweepstate.dcel;
 
-	return GEO_SUCCESS;
+	return GEO_RESULT::SUCCESS;
 }
 
 }

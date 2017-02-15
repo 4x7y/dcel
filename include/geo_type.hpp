@@ -4,11 +4,11 @@
 namespace geo
 {
 
-typedef enum
+typedef enum class GEO_RESULT
 {
-	GEO_SUCCESS          =  0,
-	GEO_FAILURE          = -1,
-	GEO_NOT_ENOUGH_POINT = -2
+	SUCCESS				=  0,
+	FAILURE				= -1,
+	INSUFFICIENT_POINTS = -2
 } GEO_RESULT;
 
 // 2 Dimension Point

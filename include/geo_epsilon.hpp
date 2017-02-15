@@ -5,10 +5,10 @@ namespace geo
 {
 namespace Epsilon
 {
-	static double compute();
+	double compute();
 	static const double E = compute();
 
 } // namespace Epsilon
 } // namespace geo
 
-#endif
+#endif /* GEO_EPSILON_HPP */
