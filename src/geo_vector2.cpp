@@ -1,4 +1,5 @@
 #include "geo_vector2.hpp"
+#include "geo_epsilon.hpp"
 
 namespace geo
 {
@@ -150,7 +151,12 @@ void	Vector2::substract(const Vector2& vector)
 
 bool	Vector2::isZero() const
 {
-	
+	if (x < Epsilon::E && y < Epsilon::E)
+	{
+		return true;
+	}
+
+	return false;
 }
 
 double  Vector2::cross(double x, double y) const
@@ -160,7 +166,7 @@ double  Vector2::cross(double x, double y) const
 
 double  Vector2::cross(const Vector2& vector) const
 {
-	
+	return this->x * vector.y - this->y * vector.x;
 }
 
 Vector2 Vector2::operator+ (const Vector2& vector) const
