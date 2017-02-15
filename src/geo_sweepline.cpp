@@ -17,6 +17,15 @@ SweepLine::~SweepLine()
 {
 }
 
+GEO_RESULT SweepLine::triangulate(const std::vector<Vector2>& points) const
+{
+	DoubleEdgeList dcel;
+	createTriangulation(points, dcel);
+
+	return GEO_RESULT::SUCCESS;
+}
+
+
 GEO_RESULT SweepLine::createTriangulation(const std::vector<Vector2>& points, DoubleEdgeList& dcel) const
 {
 	if (points.size() < 4)
@@ -24,11 +33,11 @@ GEO_RESULT SweepLine::createTriangulation(const std::vector<Vector2>& points, Do
 		return GEO_RESULT::INSUFFICIENT_POINTS;
 	}
 
-	SweepLineState sweepstate;
+	// Initialize a sweepline state controller
+	SweepLineState* sweepstate = new SweepLineState();
+	std::priority_queue<SweepLineVertex *> queue;
+	sweepstate->initialize(points, queue);
 
-	std::priority_queue<Vector2> queue;
-	
-	sweepstate.initialize(points, queue);
 
 
 

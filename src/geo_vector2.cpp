@@ -169,6 +169,11 @@ double  Vector2::cross(const Vector2& vector) const
 	return this->x * vector.y - this->y * vector.x;
 }
 
+Vector2 Vector2::to(const Vector2& vector) const
+{
+	return Vector2(vector.x - this->x, vector.y - this->y);
+}
+
 Vector2 Vector2::operator+ (const Vector2& vector) const
 {
 	Vector2 r;

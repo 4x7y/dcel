@@ -87,6 +87,8 @@ namespace geo
 
 		double  cross(const Vector2& vector) const;
 
+		Vector2 to(const Vector2& vector) const;
+
 		bool	operator== (const Vector2& vector) const;
 
 		Vector2 operator+ (const Vector2& vector) const;

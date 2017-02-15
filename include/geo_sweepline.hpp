@@ -17,6 +17,8 @@ public:
 	SweepLine();
 	~SweepLine();
 
+	GEO_RESULT triangulate(const std::vector<Vector2>& points) const;
+
 	GEO_RESULT createTriangulation(const std::vector<Vector2>& points, DoubleEdgeList& triangles) const;
 
 };

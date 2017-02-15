@@ -177,6 +177,7 @@ public:
 	std::list<DoubleEdgeListHalfEdge *>	edges;
 	std::list<DoubleEdgeListFace *>		faces;
 
+	DoubleEdgeList() = default;
 	DoubleEdgeList(const std::vector<Vector2>& points);
 	~DoubleEdgeList();
 
