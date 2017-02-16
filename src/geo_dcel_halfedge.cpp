@@ -1,7 +1,6 @@
 #include "geo_dcel_halfedge.hpp"
 
-namespace geo
-{
+using namespace geo;
 
 DoubleEdgeListVertex* DoubleEdgeListHalfEdge::getDestination() const
 {
@@ -21,6 +20,4 @@ DoubleEdgeListHalfEdge* DoubleEdgeListHalfEdge::getPrevious() const
 DoubleEdgeListFace* DoubleEdgeListHalfEdge::getFace() const 
 {
 	return this->face;
-}
-
 }

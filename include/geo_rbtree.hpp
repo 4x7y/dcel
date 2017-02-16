@@ -3,7 +3,7 @@
 #include <cstddef>
 
 
-template<typename ValueT, class Compare>
+template<typename ValueT, typename SearchT, class Compare>
 class RBTree
 {
 	typedef enum { RED, BLACK } Color;
@@ -54,10 +54,10 @@ private:
 	Node *root, *NIL;
 	Compare* comp;
 
-	bool less(ValueT& left, ValueT& right)
-	{
-		return comp->less(left, right);
-	}
+	//bool less(ValueT& left, ValueT& right)
+	//{
+	//	return comp->less(left, right);
+	//}
 
 	void rotate_right(Node* p) {
 		Node *gp = p->grandparent();
@@ -125,7 +125,8 @@ private:
 		if (p->leftTree) {
 			inorder(p->leftTree);
 		}
-		std::cout << p->value << " ";
+
+		//std::cout << p->value << " ";
 
 		if (p->rightTree) {
 			inorder(p->rightTree);
@@ -139,15 +140,15 @@ private:
 		return get_smallest_child(p->leftTree);
 	}
 
-	bool delete_child(Node *p, int data) {
-		if (less(data, p->value)) {
+	bool delete_child(Node *p, const ValueT& data) {
+		if (comp->less(data, p->value)) {
 			if (p->leftTree == NIL) {
 				return false;
 			}
 			return delete_child(p->leftTree, data);
 		}
 
-		if (less(p->value, data)) {
+		if (comp->less(p->value, data)) {
 			if (p->rightTree == NIL) {
 				return false;
 			}
@@ -158,7 +159,7 @@ private:
 			delete_one_child(p);
 			return true;
 		}
-		Node *smallest = getSmallestChild(p->rightTree);
+		Node *smallest = get_smallest_child(p->rightTree);
 		std::swap(p->value, smallest->value);
 		delete_one_child(smallest);
 
@@ -252,7 +253,7 @@ private:
 	}
 
 	void insert(Node *p, ValueT& data) {
-		if (!less(p->value, data)) {
+		if (!comp->less(p->value, data)) {
 			if (p->leftTree != NIL)
 				insert(p->leftTree, data);
 			else {
@@ -327,9 +328,9 @@ private:
 	}
 
 
-	Node* get_smaller(Node* p, const ValueT& value)
+	Node* get_smaller(Node* p, const SearchT& value)
 	{
-		if (less(value, p->value))
+		if (comp->less(value, p->value))
 		{
 			if (p->leftTree == NIL)
 			{
@@ -339,7 +340,7 @@ private:
 			return get_smaller(p->leftTree, value);
 		}
 
-		if (less(p->value, value))
+		if (comp->less(p->value, value))
 		{
 			if (p->rightTree == NIL)
 			{
@@ -358,9 +359,9 @@ private:
 		return p;
 	}
 
-	Node* get_larger(Node* p, const ValueT& value)
+	Node* get_larger(Node* p, const SearchT& value)
 	{
-		if (less(value, p->value))
+		if (comp->less(value, p->value))
 		{
 			if (p->leftTree == NIL)
 			{
@@ -376,7 +377,7 @@ private:
 			return pl;
 		}
 
-		if (less(p->value, value))
+		if (comp->less(p->value, value))
 		{
 			if (p->rightTree == NIL)
 			{
@@ -427,11 +428,11 @@ public:
 		}
 	}
 
-	bool delete_value(int data) {
+	bool delete_value(const ValueT& data) {
 		return delete_child(root, data);
 	}
 
-	bool get_smaller(const ValueT& value, ValueT& smaller)
+	bool get_smaller(const SearchT& value, ValueT& smaller)
 	{
 		Node* p = get_smaller(root, value);
 
@@ -444,7 +445,7 @@ public:
 		return true;
 	}
 
-	bool get_larger(const ValueT& value, ValueT& larger)
+	bool get_larger(const SearchT& value, ValueT& larger)
 	{
 		Node* p = get_larger(root, value);
 

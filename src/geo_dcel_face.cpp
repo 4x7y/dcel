@@ -1,8 +1,7 @@
 #include "geo_dcel_face.hpp"
 #include "geo_dcel_halfedge.hpp"
 
-namespace geo
-{
+using namespace geo;
 
 int DoubleEdgeListFace::getEdgeCount() const
 {
@@ -16,6 +15,4 @@ int DoubleEdgeListFace::getEdgeCount() const
 		}
 	}
 	return count;
-}
-
 }

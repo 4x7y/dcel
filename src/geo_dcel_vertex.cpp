@@ -1,8 +1,7 @@
 #include "geo_dcel_vertex.hpp"
 #include "geo_dcel_halfedge.hpp"
 
-namespace geo
-{
+using namespace geo;
 
 DoubleEdgeListVertex::DoubleEdgeListVertex(const Vector2& point)
 {
@@ -34,5 +33,3 @@ DoubleEdgeListHalfEdge* DoubleEdgeListVertex::getEdgeTo(DoubleEdgeListVertex* no
 	}
 	return nullptr;
 }
-
-} // namespace geo

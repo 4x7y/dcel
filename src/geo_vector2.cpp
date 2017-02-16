@@ -1,8 +1,7 @@
 #include "geo_vector2.hpp"
 #include "geo_epsilon.hpp"
 
-namespace geo
-{
+using namespace geo;
 
 Vector2 Vector2::create(double magnitude, double direction)
 {
@@ -230,6 +229,4 @@ bool Vector2::operator== (const Vector2& vector) const
 	}
 
 	return false;
-}
-
 }

@@ -4,7 +4,6 @@
 
 namespace geo
 {
-
 class SweepLineEdge
 {
 	// The current state of the sweepline. This value is 
@@ -34,11 +33,7 @@ public:
 	double getSortValue(double y) const;
 
 	bool operator< (const SweepLineEdge& edge) const;
-
 };
-
-
-
 
 } // namespace geo
 

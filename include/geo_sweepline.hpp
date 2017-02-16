@@ -11,16 +11,25 @@
 
 namespace geo
 {
+
+class SweepLineVertex;
+class SweepLineState;
+
 class SweepLine
 {
 public:
-	SweepLine();
-	~SweepLine();
+	GEO_RESULT triangulate(
+		const std::vector<Vector2>& points,
+		std::vector<Triangle>& triangles) const;
+	GEO_RESULT createTriangulation(
+		const std::vector<Vector2>& points, DoubleEdgeList& triangles) const;
 
-	GEO_RESULT triangulate(const std::vector<Vector2>& points) const;
-
-	GEO_RESULT createTriangulation(const std::vector<Vector2>& points, DoubleEdgeList& triangles) const;
-
+private:
+	void start	(SweepLineVertex* vertex, SweepLineState* sweepstate);
+	void end		(SweepLineVertex* vertex, SweepLineState* sweepstate);
+	void split	(SweepLineVertex* vertex, SweepLineState* sweepstate);
+	void merge	(SweepLineVertex* vertex, SweepLineState* sweepstate);
+	void regular	(SweepLineVertex* vertex, SweepLineState* sweepstate);
 };
 }
 #endif /* GEO_SWEEPLINE_HPP */

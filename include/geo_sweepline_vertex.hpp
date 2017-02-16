@@ -12,7 +12,8 @@ enum class SweepLineVertexType
 	SPLIT,
 	MERGE,
 	START,
-	END
+	END,
+	UNDEFINED
 };
 
 class SweepLineVertex
@@ -26,9 +27,43 @@ public:
 	SweepLineEdge*		right;
 
 	Vector2				point;
+	int					index;
 
-	SweepLineVertex(Vector2 point, int i);
+	SweepLineVertex(const Vector2& point, int i)
+		: type(SweepLineVertexType::UNDEFINED)
+		, prev(nullptr)
+		, next(nullptr)
+		, left(nullptr)
+		, right(nullptr)
+		, point(point)
+		, index(i)
+	{}
+
+	bool isInteriorRight();
+
+	// bool isLeft(const SweepLineEdge& edge);
+
+	bool operator< (const SweepLineVertex& vertex) const;
 };
+
+class SweepLineVertexPtr
+{
+public:
+	SweepLineVertex*	ptr;
+
+	SweepLineVertexPtr(SweepLineVertex* ptr)
+		: ptr(ptr) {}
+
+	bool operator< (const SweepLineVertexPtr& Vptr) const
+	{
+		if (*(this->ptr) < *(Vptr.ptr))
+		{
+			return true;
+		}
+		return false;
+	}
+};
+
 
 } // namespace geo
 

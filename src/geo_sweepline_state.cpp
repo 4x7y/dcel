@@ -6,9 +6,25 @@
 
 using namespace geo;
 
+
+bool Compare::less(SweepLineVertex* vertex, SweepLineEdge * edge) const
+{
+	return true;
+}
+bool Compare::less(SweepLineEdge* edge, SweepLineVertex* vertex) const
+{
+	return true;
+}
+bool Compare::less(SweepLineEdge* e1, SweepLineEdge* e2) const
+{
+	return true;
+}
+
+
+
 void SweepLineState::initialize(
 		const std::vector<Vector2>& points,
-		std::priority_queue<SweepLineVertex *>& queue)
+		std::priority_queue<SweepLineVertexPtr>& queue)
 {
 	this->dcel = new DoubleEdgeList(points);
 
@@ -36,6 +52,11 @@ void SweepLineState::initialize(
 			prevVertex->next = vertex;
 		}
 
+		if (rootVertex == nullptr)
+		{
+			rootVertex = vertex;
+		}
+
 		// get the neighbouring points
 		Vector2 point1 = points[i + 1 == size ? 0 : i + 1];
 		Vector2 point0 = points[i == 0 ? size - 1 : i - 1];
@@ -45,7 +66,9 @@ void SweepLineState::initialize(
 
 		// set the previous vertex to this vertex
 		prevVertex = vertex;
-		queue.push(vertex);
+
+		SweepLineVertexPtr vertex_ptr(vertex);
+		queue.push(vertex_ptr);
 
 		// create the next edge
 		SweepLineEdge* e = new SweepLineEdge(&reference_y);
@@ -111,8 +134,7 @@ SweepLineVertexType SweepLineState::getType(
 	bool pBelowP1 = isBelow(point, point_right);
 
 	// where is p relative to its neighbors?
-	if (pBelowP0 && pBelowP1)
-	{
+	if (pBelowP0 && pBelowP1) {
 		// then check if the 
 		// if its below both of them then we need
 		// to check the interior angle

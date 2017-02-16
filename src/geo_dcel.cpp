@@ -3,8 +3,7 @@
 #include "geo_dcel_halfedge.hpp"
 #include "geo_dcel_vertex.hpp"
 
-namespace geo
-{
+using namespace geo;
 
 DoubleEdgeList::DoubleEdgeList(const std::vector<Vector2>& points)
 {
@@ -126,7 +125,9 @@ void DoubleEdgeList::addHalfEdges(DoubleEdgeListVertex* v1, DoubleEdgeListVertex
 	faces.push_back(face);
 }
 
-DoubleEdgeListHalfEdge* DoubleEdgeList::getPreviousEdge(DoubleEdgeListVertex* vertex, DoubleEdgeListFace* face)
+DoubleEdgeListHalfEdge* DoubleEdgeList::getPreviousEdge(
+	DoubleEdgeListVertex* vertex,
+	DoubleEdgeListFace*	  face)
 {
 	auto twin = vertex->leaving->twin;
 	auto edge = vertex->leaving->twin->next->twin;
@@ -143,7 +144,9 @@ DoubleEdgeListHalfEdge* DoubleEdgeList::getPreviousEdge(DoubleEdgeListVertex* ve
 	return edge;
 }
 
-DoubleEdgeListFace* DoubleEdgeList::getReferenceFace(DoubleEdgeListVertex* v1, DoubleEdgeListVertex* v2)
+DoubleEdgeListFace* DoubleEdgeList::getReferenceFace(
+	DoubleEdgeListVertex* v1,
+	DoubleEdgeListVertex* v2)
 {
 	if (v1->leaving->face == v2->leaving->face)
 	{
@@ -168,8 +171,8 @@ DoubleEdgeListFace* DoubleEdgeList::getReferenceFace(DoubleEdgeListVertex* v1, D
 	return v1->leaving->face;
 }
 
-void DoubleEdgeList::removeHalfEdges(int index) {
-
+void DoubleEdgeList::removeHalfEdges(int index)
+{
 	auto iter = next(edges.begin(), index);
 	auto e = *iter;
 	removeHalfEdges(e);
@@ -205,5 +208,4 @@ void DoubleEdgeList::removeHalfEdges(DoubleEdgeListHalfEdge* edge)
 	edges.remove(twin);
 	delete edge;
 	delete twin;
-}
 }
