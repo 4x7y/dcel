@@ -20,8 +20,6 @@ bool Compare::less(SweepLineEdge* e1, SweepLineEdge* e2) const
 	return true;
 }
 
-
-
 void SweepLineState::initialize(
 		const std::vector<Vector2>& points,
 		std::priority_queue<SweepLineVertexPtr>& queue)
