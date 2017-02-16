@@ -18,7 +18,7 @@ int main(int argc, const char * argv[])
 
 	geo::DoubleEdgeList dcel;
 	std::vector<geo::Vector2> points;
-	for (size_t i = 0; i < 10; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		points.push_back(
 			geo::Vector2(rng.next() % WIN_WIDTH, rng.next() % WIN_HEIGHT));

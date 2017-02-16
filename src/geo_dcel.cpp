@@ -27,7 +27,7 @@ void DoubleEdgeList::initialize(const std::vector<Vector2>& points)
 	DoubleEdgeListHalfEdge* prevLeftEdge  = nullptr;
 	DoubleEdgeListHalfEdge* prevRightEdge = nullptr;
 
-	for (size_t i = 0; i < size; i++) 
+	for (int i = 0; i < size; i++) 
 	{
 		auto point    = points[i];
 

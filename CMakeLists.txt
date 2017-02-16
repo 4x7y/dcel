@@ -5,7 +5,7 @@ find_package( OpenCV REQUIRED )
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-set(SOURCE_FILES
+file(GLOB SOURCE_FILES
     include/*.hpp
     include/Shape/*.hpp
     src/*.cpp)

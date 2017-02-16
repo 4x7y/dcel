@@ -35,7 +35,7 @@ void SweepLineState::initialize(
 	SweepLineEdge*	  prevEdge   = nullptr;
 
 	// Build the vertices and edges
-	for (size_t i = 0; i < size; i++)
+	for (int i = 0; i < size; i++)
 	{
 		Vector2 point = points[i];
 

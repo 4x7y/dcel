@@ -131,7 +131,7 @@ namespace geo
 			Face* f = new Face(data);
 			faces.push_back(f);
 
-			size_t i;
+			int i;
 			for (i = 0; i < boundary.size(); i++)
 			{
 				f->boundary.push_back(boundary[i]);
