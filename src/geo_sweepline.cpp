@@ -26,6 +26,13 @@ GEO_RESULT SweepLine::createTriangulation(const std::vector<Vector2>& points, Do
 		return GEO_RESULT::INSUFFICIENT_POINTS;
 	}
 
+	double winding = getWinding(points);
+	if (winding < 0)
+	{
+		// counter-clockwise
+		return GEO_RESULT::FAILURE;
+	}
+
 	// Initialize a sweepline state controller
 	SweepLineState* sweepstate = new SweepLineState();
 	std::vector<SweepLineVertex *> sorted_vertex;
@@ -39,28 +46,35 @@ GEO_RESULT SweepLine::createTriangulation(const std::vector<Vector2>& points, Do
 		SweepLineVertex* vertex = queue.top().ptr;
 		queue.pop();
 
-		switch (vertex->type)
-		{
-		case SweepLineVertexType::START:
-			// Handle start vertex
-			break;
-		case SweepLineVertexType::END:
-			// Handle end vertex
-			break;
-		case SweepLineVertexType::SPLIT:
-			// Handle split vertex
-			break;
-		case SweepLineVertexType::MERGE:
-			// Handle merge vertex
-			break;
-		case SweepLineVertexType::REGULAR:
-			// Handle regular vertex
-			break;
+		printf("%f, %f\n", vertex->point.x, vertex->point.y);
 
-		default:
-			// the program should not run here.
-			return GEO_RESULT::FAILURE;
-		}
+		//switch (vertex->type)
+		//{
+		//case SweepLineVertexType::START:
+		//	// Handle start vertex
+		//	start(vertex, sweepstate);
+		//	break;
+		//case SweepLineVertexType::END:
+		//	end(vertex, sweepstate);
+		//	// Handle end vertex
+		//	break;
+		//case SweepLineVertexType::SPLIT:
+		//	// Handle split vertex
+		//	split(vertex, sweepstate);
+		//	break;
+		//case SweepLineVertexType::MERGE:
+		//	// Handle merge vertex
+		//	merge(vertex, sweepstate);
+		//	break;
+		//case SweepLineVertexType::REGULAR:
+		//	// Handle regular vertex
+		//	regular(vertex, sweepstate);
+		//	break;
+
+		//default:
+		//	// the program should not run here.
+		//	return GEO_RESULT::FAILURE;
+		//}
 
 		delete vertex;
 	}
@@ -72,7 +86,7 @@ GEO_RESULT SweepLine::createTriangulation(const std::vector<Vector2>& points, Do
 	return GEO_RESULT::SUCCESS;
 }
 
-void SweepLine::start(SweepLineVertex* vertex, SweepLineState* sweepstate)
+void SweepLine::start(SweepLineVertex* vertex, SweepLineState* sweepstate) const
 {
 	// we need to add the edge to the left to the tree
 	// since the line in the next event may be intersecting it
@@ -84,7 +98,7 @@ void SweepLine::start(SweepLineVertex* vertex, SweepLineState* sweepstate)
 	leftEdge->helper = vertex;
 }
 
-void SweepLine::end(SweepLineVertex* vertex, SweepLineState* sweepstate)
+void SweepLine::end(SweepLineVertex* vertex, SweepLineState* sweepstate) const
 {
 	// if the vertex type is an end vertex then we
 	// know that we need to remove the right edge
@@ -102,7 +116,7 @@ void SweepLine::end(SweepLineVertex* vertex, SweepLineState* sweepstate)
 	sweepstate->tree.delete_value(rightEdge);
 }
 
-void SweepLine::split(SweepLineVertex* vertex, SweepLineState* sweepstate)
+void SweepLine::split(SweepLineVertex* vertex, SweepLineState* sweepstate) const
 {
 	// if we have a split vertex then we can find
 	// the closest edge to the left side of the vertex
@@ -123,7 +137,7 @@ void SweepLine::split(SweepLineVertex* vertex, SweepLineState* sweepstate)
 	vertex->left->helper = vertex;
 }
 
-void SweepLine::merge(SweepLineVertex* vertex, SweepLineState* sweepstate)
+void SweepLine::merge(SweepLineVertex* vertex, SweepLineState* sweepstate) const
 {
 	// get the previous edge
 	SweepLineEdge* eiPrev = vertex->right;
@@ -150,7 +164,7 @@ void SweepLine::merge(SweepLineVertex* vertex, SweepLineState* sweepstate)
 	ej->helper = vertex;
 }
 
-void SweepLine::regular(SweepLineVertex* vertex, SweepLineState* sweepstate)
+void SweepLine::regular(SweepLineVertex* vertex, SweepLineState* sweepstate) const
 {
 	// check if the interior is to the right of this vertex
 	if (vertex->isInteriorRight())
@@ -184,4 +198,27 @@ void SweepLine::regular(SweepLineVertex* vertex, SweepLineState* sweepstate)
 		// set the new helper
 		ej->helper = vertex;
 	}
+}
+
+double SweepLine::getWinding(const std::vector<Vector2>& points) const
+{
+	// get the size
+	int size = points.size();
+	// the size must be larger than 1
+	if (size < 2)
+	{
+		return 0;
+	}
+
+	// determine the winding by computing a signed "area"
+	double area = 0.0;
+	for (int i = 0; i < size; i++) {
+		// get the current point and the next point
+		Vector2 p1 = points[i];
+		Vector2 p2 = points[i + 1 == size ? 0 : i + 1];
+		// add the signed area
+		area += p1.cross(p2);
+	}
+	// return the area
+	return area;
 }

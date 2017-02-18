@@ -17,12 +17,15 @@ int main(int argc, const char * argv[])
 	cv::Mat canvas(WIN_WIDTH, WIN_WIDTH, CV_8UC3);
 
 	geo::DoubleEdgeList dcel;
-	std::vector<geo::Vector2> points;
-	for (int i = 0; i < 10; i++)
-	{
-		points.push_back(
-			geo::Vector2(rng.next() % WIN_WIDTH, rng.next() % WIN_HEIGHT));
-	}
+	std::vector<geo::Vector2> points = {
+		{100, 100}, {200, 100}, {300, 200}, {400, 350}, {350, 400}, {200, 200}, { 180, 170 }};
+	//for (int i = 0; i < 10; i++)
+	//{
+	//	points.push_back(
+	//		geo::Vector2(rng.next() % WIN_WIDTH, rng.next() % WIN_HEIGHT));
+	//}
+
+
 	
 	geo::SweepLine sweepline;
 	std::vector<geo::Triangle> triangles;

@@ -14,10 +14,10 @@ bool SweepLineVertex::operator< (const SweepLineVertex& vertex) const
 	}
 
 	if (diff > 0) {
-		return false;
+		return true;
 	}
 
-	return true;
+	return false;
 }
 
 
