@@ -4,6 +4,7 @@
 #include "geo_sweepline_vertex.hpp"
 #include "geo_sweepline_edge.hpp"
 #include "geo_rbtree.hpp"
+
 #include <queue>
 
 using namespace geo;
@@ -15,6 +16,20 @@ GEO_RESULT SweepLine::triangulate(
 {
 	DoubleEdgeList dcel;
 	createTriangulation(points, dcel);
+
+	//// [Test] Render DCEL Polygon
+	//CvMat* img = cvCreateMat(500, 500, CV_8UC3);
+	//for (auto iter = dcel.edges.begin(); iter != dcel.edges.end(); ++iter)
+	//{
+	//	DoubleEdgeListHalfEdge* e = *iter;
+	//	cvLine(img,
+	//		CvPoint(e->origin->point.x, e->origin->point.y),
+	//		CvPoint(e->twin->origin->point.x, e->twin->origin->point.y),
+	//		CvScalar(1, 0.5, 0.5), 2);
+	//}
+	//cvShowImage("dcel", img);
+	//cvWaitKey(0);
+	//cvReleaseMat(&img);
 
 	return GEO_RESULT::SUCCESS;
 }
@@ -38,7 +53,7 @@ GEO_RESULT SweepLine::createTriangulation(const std::vector<Vector2>& points, Do
 	std::vector<SweepLineVertex *> sorted_vertex;
 
 	std::priority_queue<SweepLineVertexPtr> queue;
-	sweepstate->initialize(points, queue);
+	sweepstate->initialize(points, dcel, queue);
 
 	while (!queue.empty())
 	{
@@ -75,9 +90,7 @@ GEO_RESULT SweepLine::createTriangulation(const std::vector<Vector2>& points, Do
 	}
 
 	// triangulate Y-Monotone Polygons in DCEL
-	sweepstate->dcel->triangulateYMonotonePolygons();
-
-	delete sweepstate;
+	dcel.triangulateYMonotonePolygons();
 
 	return GEO_RESULT::SUCCESS;
 }
@@ -199,7 +212,7 @@ void SweepLine::regular(SweepLineVertex* vertex, SweepLineState* sweepstate) con
 double SweepLine::getWinding(const std::vector<Vector2>& points) const
 {
 	// get the size
-	int size = points.size();
+	int size = int(points.size());
 	// the size must be larger than 1
 	if (size < 2)
 	{

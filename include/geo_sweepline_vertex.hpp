@@ -1,7 +1,6 @@
 #ifndef GEO_SWEEPLINE_VERTEX_HPP
 #define GEO_SWEEPLINE_VERTEX_HPP
 #include "geo_vector2.hpp"
-#include <iostream>
 
 namespace geo
 {
@@ -57,15 +56,10 @@ public:
 
 	bool operator< (const SweepLineVertexPtr& Vptr) const
 	{
-		std::cout << "y: " << this->ptr->point.y << " " << Vptr.ptr->point.y << std::endl;
-		std::cout << "x: " << this->ptr->point.x << " " << Vptr.ptr->point.x << std::endl;
-
 		if (*(this->ptr) < *(Vptr.ptr))
 		{
-			std::cout << " < \n\n";
 			return true;
 		}
-		std::cout << " > \n\n";
 		return false;
 	}
 };

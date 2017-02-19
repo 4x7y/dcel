@@ -1,7 +1,5 @@
 #ifndef GEO_RBTREE_HPP
 #define GEO_RBTREE_HPP
-#include <cstddef>
-
 
 template<typename ValueT, typename SearchT, class Compare>
 class RBTree

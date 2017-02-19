@@ -57,9 +57,12 @@ bool Compare::less(SweepLineEdge* e1, SweepLineEdge* e2) const
 
 void SweepLineState::initialize(
 		const std::vector<Vector2>& points,
+		DoubleEdgeList& dcel,
 		std::priority_queue<SweepLineVertexPtr>& queue)
 {
-	this->dcel = new DoubleEdgeList(points);
+	//this->dcel = new DoubleEdgeList(points);
+	dcel.initialize(points);
+	this->dcel = &dcel;
 
 	int size = points.size();
 

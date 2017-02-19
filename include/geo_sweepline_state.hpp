@@ -27,6 +27,7 @@ public:
 	
 	void initialize(
 		const std::vector<Vector2>& points,
+		DoubleEdgeList& dcel,
 		std::priority_queue<SweepLineVertexPtr>& queue);
 
 private:

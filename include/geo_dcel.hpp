@@ -163,12 +163,12 @@ namespace geo
 	};
 }
 
-
 namespace geo
 {
 class DoubleEdgeListFace;
 class DoubleEdgeListHalfEdge;
 class DoubleEdgeListVertex;
+class MonotonePolygon;
 
 class DoubleEdgeList
 {
@@ -186,9 +186,14 @@ public:
 	void addHalfEdges(DoubleEdgeListVertex* v1, DoubleEdgeListVertex* v2);
 	void removeHalfEdges(int index);
 	void removeHalfEdges(DoubleEdgeListHalfEdge* edge);
+	void triangulateYMonotonePolygons();
 
 	static DoubleEdgeListHalfEdge*	getPreviousEdge(DoubleEdgeListVertex* vertex, DoubleEdgeListFace* face);
 	static DoubleEdgeListFace*		getReferenceFace(DoubleEdgeListVertex* v1, DoubleEdgeListVertex* v2);
+
+private:
+	void triangulateYMonotonePolygon(const MonotonePolygon& monotonePolygon);
+	void getYMonotonePolygons(std::vector<MonotonePolygon>& monotonePolygons);
 };
 
 }
