@@ -38,15 +38,12 @@ GEO_RESULT SweepLine::createTriangulation(const std::vector<Vector2>& points, Do
 	std::vector<SweepLineVertex *> sorted_vertex;
 
 	std::priority_queue<SweepLineVertexPtr> queue;
-
 	sweepstate->initialize(points, queue);
 
 	while (!queue.empty())
 	{
 		SweepLineVertex* vertex = queue.top().ptr;
 		queue.pop();
-
-		printf("%f, %f\n", vertex->point.x, vertex->point.y);
 
 		switch (vertex->type)
 		{
@@ -78,7 +75,8 @@ GEO_RESULT SweepLine::createTriangulation(const std::vector<Vector2>& points, Do
 	}
 
 	// triangulate Y-Monotone Polygons in DCEL
-	
+	sweepstate->dcel->triangulateYMonotonePolygons();
+
 	delete sweepstate;
 
 	return GEO_RESULT::SUCCESS;

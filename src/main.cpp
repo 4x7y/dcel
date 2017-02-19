@@ -18,7 +18,10 @@ int main(int argc, const char * argv[])
 
 	geo::DoubleEdgeList dcel;
 	std::vector<geo::Vector2> points = {
-		{150, 100},{ 200, 150 },{ 150, 200 }, {100, 151} };
+		{400, 150}, {300, 250}, {350, 350}, {250, 300}, {300, 400},
+		{200, 450}, {100, 350}, {200, 200}, {150, 150}, {250, 200},
+		{300, 100} };
+	
 	//for (int i = 0; i < 10; i++)
 	//{
 	//	points.push_back(
