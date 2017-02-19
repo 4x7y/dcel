@@ -1,6 +1,6 @@
+#include "geo_vector2.hpp"
 #include "geo_sweepline.hpp"
 #include "geo_sweepline_state.hpp"
-#include "geo_vector2.hpp"
 #include "geo_sweepline_vertex.hpp"
 #include "geo_sweepline_edge.hpp"
 #include "geo_rbtree.hpp"
@@ -91,7 +91,7 @@ void SweepLine::start(SweepLineVertex* vertex, SweepLineState* sweepstate) const
 	SweepLineEdge* leftEdge = vertex->left;
 	// set the reference y to the current vertex's y
 	sweepstate->reference_y = vertex->point.y;
-	//// sweepstate->tree.insert(leftEdge);
+	sweepstate->tree.insert(leftEdge);
 	// set the left edge's helper to this vertex
 	leftEdge->helper = vertex;
 }
@@ -111,7 +111,7 @@ void SweepLine::end(SweepLineVertex* vertex, SweepLineState* sweepstate) const
 	// set the reference y to the current vertex's y
 	sweepstate->reference_y = vertex->point.y;
 	// remove v.right from T
-	////sweepstate->tree.delete_value(rightEdge);
+	sweepstate->tree.delete_value(rightEdge);
 }
 
 void SweepLine::split(SweepLineVertex* vertex, SweepLineState* sweepstate) const
@@ -148,7 +148,7 @@ void SweepLine::merge(SweepLineVertex* vertex, SweepLineState* sweepstate) const
 	sweepstate->reference_y = vertex->point.y;
 	// remove the previous edge since the sweep 
 	// line no longer intersects with it
-	////sweepstate->tree.delete_value(eiPrev);
+	sweepstate->tree.delete_value(eiPrev);
 	// find the edge closest to the given vertex
 	SweepLineEdge* ej;
 	sweepstate->tree.get_smaller(vertex, ej);
@@ -177,9 +177,9 @@ void SweepLine::regular(SweepLineVertex* vertex, SweepLineState* sweepstate) con
 		sweepstate->reference_y = vertex->point.y;
 		// remove the previous edge since the sweep 
 		// line no longer intersects with it
-		////sweepstate->tree.delete_value(vertex->right);
+		sweepstate->tree.delete_value(vertex->right);
 		// add the next edge
-		////sweepstate->tree.insert(vertex->left);
+		sweepstate->tree.insert(vertex->left);
 		// set the helper
 		vertex->left->helper = vertex;
 	}

@@ -42,7 +42,7 @@ public:
 
 	bool isInteriorRight() const;
 
-	// bool isLeft(const SweepLineEdge& edge);
+	bool isLeft(const SweepLineEdge* edge) const;
 
 	bool operator< (const SweepLineVertex& vertex) const;
 };

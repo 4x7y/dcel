@@ -9,15 +9,50 @@ using namespace geo;
 
 bool Compare::less(SweepLineVertex* vertex, SweepLineEdge * edge) const
 {
-	return true;
+	if (vertex->isLeft(edge)) {
+		// if vertex is left of the current edge then go left in the tree
+		return true;
+	}
+	else {
+		// otherwise vertex is right of the current edge so go right
+		// and save the current edge as the best
+		// closest = edge;
+		return false;
+	}
 }
 bool Compare::less(SweepLineEdge* edge, SweepLineVertex* vertex) const
 {
-	return true;
+	if (vertex->isLeft(edge)) {
+		// if e is left of the current edge then go left in the tree
+		return false;
+	}
+	else {
+		// otherwise e is right of the current edge so go right
+		// and save the current edge as the best
+		// closest = edge;
+		return true;
+	}
 }
 bool Compare::less(SweepLineEdge* e1, SweepLineEdge* e2) const
 {
-	return true;
+	if (e1 == e2)
+	{
+		return false;
+	}
+
+	// compare the intersection of the sweep line and the edges
+	// to see which is to the left or right
+	double y = *(e1->ref_y);
+
+	double x1 = e1->getSortValue(y);
+	double x2 = e2->getSortValue(y);
+
+	if (x1 < x2) {
+		return false;
+	}
+	else {
+		return true;
+	}
 }
 
 void SweepLineState::initialize(

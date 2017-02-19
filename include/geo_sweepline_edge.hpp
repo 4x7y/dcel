@@ -21,6 +21,11 @@ public:
 	// This value will be inf when the line segment is horizontal
 	double slope_inverse;
 
+	// The current state of the sweepline. This value is 
+	// shared by all edges when sorted in a binary search
+	// tree.
+	double* ref_y;
+
 	SweepLineEdge(double* ref_y)
 		: ref_y(ref_y)
 	{}
@@ -31,11 +36,7 @@ public:
 
 	bool operator< (const SweepLineEdge& edge) const;
 
-private:
-	// The current state of the sweepline. This value is 
-	// shared by all edges when sorted in a binary search
-	// tree.
-	double* ref_y;
+
 };
 
 } // namespace geo

@@ -30,3 +30,21 @@ bool SweepLineVertex::isInteriorRight() const
 {
 	return left->isInteriorRight();
 }
+
+static double getLocation(Vector2 point, Vector2 linePoint1, Vector2 linePoint2) {
+	return (linePoint2.x - linePoint1.x) * (point.y - linePoint1.y) -
+		(point.x - linePoint1.x) * (linePoint2.y - linePoint1.y);
+}
+
+bool SweepLineVertex::isLeft(const SweepLineEdge* edge) const
+{
+	// its in between the min and max x so we need to 
+	// do a side of line test
+	double location = getLocation(point, edge->v0->point, edge->v1->point);
+	if (location < 0.0) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
