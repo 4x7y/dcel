@@ -40,7 +40,7 @@ public:
 		, index(i)
 	{}
 
-	bool isInteriorRight();
+	bool isInteriorRight() const;
 
 	// bool isLeft(const SweepLineEdge& edge);
 

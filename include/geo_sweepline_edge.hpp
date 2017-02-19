@@ -6,11 +6,6 @@ namespace geo
 {
 class SweepLineEdge
 {
-	// The current state of the sweepline. This value is 
-	// shared by all edges when sorted in a binary search
-	// tree.
-	double* ref_y;
-
 public:
 
 	// The left-top vertex of the line segment
@@ -28,11 +23,19 @@ public:
 
 	SweepLineEdge(double* ref_y)
 		: ref_y(ref_y)
-	{};
+	{}
 
 	double getSortValue(double y) const;
 
+	bool isInteriorRight() const;
+
 	bool operator< (const SweepLineEdge& edge) const;
+
+private:
+	// The current state of the sweepline. This value is 
+	// shared by all edges when sorted in a binary search
+	// tree.
+	double* ref_y;
 };
 
 } // namespace geo

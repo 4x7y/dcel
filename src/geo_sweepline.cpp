@@ -48,35 +48,33 @@ GEO_RESULT SweepLine::createTriangulation(const std::vector<Vector2>& points, Do
 
 		printf("%f, %f\n", vertex->point.x, vertex->point.y);
 
-		//switch (vertex->type)
-		//{
-		//case SweepLineVertexType::START:
-		//	// Handle start vertex
-		//	start(vertex, sweepstate);
-		//	break;
-		//case SweepLineVertexType::END:
-		//	end(vertex, sweepstate);
-		//	// Handle end vertex
-		//	break;
-		//case SweepLineVertexType::SPLIT:
-		//	// Handle split vertex
-		//	split(vertex, sweepstate);
-		//	break;
-		//case SweepLineVertexType::MERGE:
-		//	// Handle merge vertex
-		//	merge(vertex, sweepstate);
-		//	break;
-		//case SweepLineVertexType::REGULAR:
-		//	// Handle regular vertex
-		//	regular(vertex, sweepstate);
-		//	break;
+		switch (vertex->type)
+		{
+		case SweepLineVertexType::START:
+			// Handle start vertex
+			start(vertex, sweepstate);
+			break;
+		case SweepLineVertexType::END:
+			end(vertex, sweepstate);
+			// Handle end vertex
+			break;
+		case SweepLineVertexType::SPLIT:
+			// Handle split vertex
+			split(vertex, sweepstate);
+			break;
+		case SweepLineVertexType::MERGE:
+			// Handle merge vertex
+			merge(vertex, sweepstate);
+			break;
+		case SweepLineVertexType::REGULAR:
+			// Handle regular vertex
+			regular(vertex, sweepstate);
+			break;
 
-		//default:
-		//	// the program should not run here.
-		//	return GEO_RESULT::FAILURE;
-		//}
-
-		delete vertex;
+		default:
+			// the program should not run here.
+			return GEO_RESULT::FAILURE;
+		}
 	}
 
 	// triangulate Y-Monotone Polygons in DCEL
@@ -93,7 +91,7 @@ void SweepLine::start(SweepLineVertex* vertex, SweepLineState* sweepstate) const
 	SweepLineEdge* leftEdge = vertex->left;
 	// set the reference y to the current vertex's y
 	sweepstate->reference_y = vertex->point.y;
-	sweepstate->tree.insert(leftEdge);
+	//// sweepstate->tree.insert(leftEdge);
 	// set the left edge's helper to this vertex
 	leftEdge->helper = vertex;
 }
@@ -113,7 +111,7 @@ void SweepLine::end(SweepLineVertex* vertex, SweepLineState* sweepstate) const
 	// set the reference y to the current vertex's y
 	sweepstate->reference_y = vertex->point.y;
 	// remove v.right from T
-	sweepstate->tree.delete_value(rightEdge);
+	////sweepstate->tree.delete_value(rightEdge);
 }
 
 void SweepLine::split(SweepLineVertex* vertex, SweepLineState* sweepstate) const
@@ -150,7 +148,7 @@ void SweepLine::merge(SweepLineVertex* vertex, SweepLineState* sweepstate) const
 	sweepstate->reference_y = vertex->point.y;
 	// remove the previous edge since the sweep 
 	// line no longer intersects with it
-	sweepstate->tree.delete_value(eiPrev);
+	////sweepstate->tree.delete_value(eiPrev);
 	// find the edge closest to the given vertex
 	SweepLineEdge* ej;
 	sweepstate->tree.get_smaller(vertex, ej);
@@ -179,9 +177,9 @@ void SweepLine::regular(SweepLineVertex* vertex, SweepLineState* sweepstate) con
 		sweepstate->reference_y = vertex->point.y;
 		// remove the previous edge since the sweep 
 		// line no longer intersects with it
-		sweepstate->tree.delete_value(vertex->right);
+		////sweepstate->tree.delete_value(vertex->right);
 		// add the next edge
-		sweepstate->tree.insert(vertex->left);
+		////sweepstate->tree.insert(vertex->left);
 		// set the helper
 		vertex->left->helper = vertex;
 	}

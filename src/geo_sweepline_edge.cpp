@@ -33,3 +33,26 @@ double SweepLineEdge::getSortValue(double y) const
 	// otherwise compute the intersection point
 	return min.x + (y - min.y) * slope_inverse;
 }
+
+bool SweepLineEdge::isInteriorRight() const
+{
+	double diff = v0->point.y - v1->point.y;
+	// check if the points have the same y value
+	if (diff == 0.0) {
+		// if they do, is the vector of the
+		// two points to the right or to the left
+		if (v0->point.x < v1->point.x) {
+			return true;
+		}
+		else {
+			return false;
+		}
+		// otherwise just compare the y values
+	}
+	else if (diff > 0.0) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}

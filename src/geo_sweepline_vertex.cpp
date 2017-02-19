@@ -1,4 +1,5 @@
 #include "geo_sweepline_vertex.hpp"
+#include "geo_sweepline_edge.hpp"
 
 using namespace geo;
 
@@ -9,11 +10,15 @@ bool SweepLineVertex::operator< (const SweepLineVertex& vertex) const
 	Vector2 q = vertex.point;
 	double diff = q.y - p.y;
 
-	if (diff == 0.0) {
-		return p.x < q.x;
+	// If the two vertex have the same y coordinate
+	if (this->point.y == vertex.point.y)
+	{
+		// The left vertex is larger
+		return this->point.x > vertex.point.x;
 	}
 
-	if (diff > 0) {
+	// The higher vertex is larger
+	if (this->point.y < vertex.point.y) {
 		return true;
 	}
 
@@ -21,7 +26,7 @@ bool SweepLineVertex::operator< (const SweepLineVertex& vertex) const
 }
 
 
-bool SweepLineVertex::isInteriorRight()
+bool SweepLineVertex::isInteriorRight() const
 {
-	return true;
+	return left->isInteriorRight();
 }
