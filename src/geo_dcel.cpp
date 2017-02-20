@@ -6,6 +6,7 @@
 
 #include <vector>
 #include "geo_epsilon.hpp"
+#include <opencv2/core.hpp>
 
 using namespace geo;
 
@@ -450,4 +451,46 @@ void DoubleEdgeList::triangulateYMonotonePolygon(
 		i++;
 	}
 
+}
+
+void DoubleEdgeList::getTriangulation(std::vector<Triangle>& triangles) const
+{
+	// get the number of faces
+	int fSize = faces.size();
+
+	// create a y-monotone polygon for each face
+	//for (int i = 0; i < fSize; i++) {
+	for (auto fIter = faces.begin(); fIter != faces.end(); ++fIter)
+	{
+		// get the face
+		DoubleEdgeListFace* face = *fIter;
+
+		// get the number of Edges ( = the number of vertices) on this face
+		int size = face->getEdgeCount();
+
+		// get the reference edge of the face
+		DoubleEdgeListHalfEdge* left = face->edge;
+
+		std::vector<Vector2> vertices(size);
+		vertices[0] = left->origin->point;
+
+		left = left->next;
+
+		int j = 1;
+		while (left != face->edge)
+		{
+			vertices[j++] = left->origin->point;
+			left = left->next;
+		}
+
+		// the vertices should form a triangle
+		if (vertices.size() != 3) {
+			continue;
+		}
+
+		// add the triangle
+		Triangle t(vertices[0], vertices[1], vertices[2]);
+
+		triangles.push_back(t);
+	}
 }

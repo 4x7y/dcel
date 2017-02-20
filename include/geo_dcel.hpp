@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "geo_vector2.hpp"
+#include "Shape/geo_triangle.hpp"
 
 namespace geo
 {
@@ -187,6 +188,7 @@ public:
 	void removeHalfEdges(int index);
 	void removeHalfEdges(DoubleEdgeListHalfEdge* edge);
 	void triangulateYMonotonePolygons();
+	void getTriangulation(std::vector<Triangle>& triangles) const;
 
 	static DoubleEdgeListHalfEdge*	getPreviousEdge(DoubleEdgeListVertex* vertex, DoubleEdgeListFace* face);
 	static DoubleEdgeListFace*		getReferenceFace(DoubleEdgeListVertex* v1, DoubleEdgeListVertex* v2);

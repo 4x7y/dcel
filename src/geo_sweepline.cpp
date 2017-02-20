@@ -17,19 +17,7 @@ GEO_RESULT SweepLine::triangulate(
 	DoubleEdgeList dcel;
 	createTriangulation(points, dcel);
 
-	//// [Test] Render DCEL Polygon
-	//CvMat* img = cvCreateMat(500, 500, CV_8UC3);
-	//for (auto iter = dcel.edges.begin(); iter != dcel.edges.end(); ++iter)
-	//{
-	//	DoubleEdgeListHalfEdge* e = *iter;
-	//	cvLine(img,
-	//		CvPoint(e->origin->point.x, e->origin->point.y),
-	//		CvPoint(e->twin->origin->point.x, e->twin->origin->point.y),
-	//		CvScalar(1, 0.5, 0.5), 2);
-	//}
-	//cvShowImage("dcel", img);
-	//cvWaitKey(0);
-	//cvReleaseMat(&img);
+	dcel.getTriangulation(triangles);
 
 	return GEO_RESULT::SUCCESS;
 }
