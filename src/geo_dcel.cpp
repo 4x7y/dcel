@@ -2,11 +2,11 @@
 #include "geo_dcel_face.hpp"
 #include "geo_dcel_halfedge.hpp"
 #include "geo_dcel_vertex.hpp"
+#include "geo_epsilon.hpp"
 #include "Shape/geo_monotone_polygon.hpp"
 
 #include <vector>
-#include "geo_epsilon.hpp"
-#include <opencv2/core.hpp>
+
 
 using namespace geo;
 
