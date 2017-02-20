@@ -13,4 +13,4 @@
 1. DCEL data structure
 2. Sweepline Polygon Decomposition
 
-[Imgur](http://i.imgur.com/ua15W7C.png)
+![Triangulation of Polygon](http://i.imgur.com/ua15W7C.png)
