@@ -2,7 +2,7 @@
 // Created by Xiaoqian Mu on 4/1/17.
 //
 
-#include <List>
+//#include <list>
 #include "point_location.h"
 #include <iostream>
 using namespace geo;
