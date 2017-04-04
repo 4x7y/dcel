@@ -39,12 +39,9 @@ bool PointLocation::Find_point_location(Vector2 &p, geo::Triangle &triangle) {
         PointLocationVertex *ver = new PointLocationVertex(p);
         PointLocationEdge *e = pl_tree.Search_point(l, ver);
         if(e!= nullptr) {
-            triangle.point1.x=e->v_l->point.x;
-            triangle.point1.y=e->v_l->point.y;
-            triangle.point2.x=e->v_r->point.x;
-            triangle.point2.y=e->v_r->point.y;
-            triangle.point3.x=e->v_r->leaving->next->twin->origin->point.x;
-            triangle.point3.y=e->v_r->leaving->next->twin->origin->point.y;
+			triangle.point1 = e->v_l->point;
+			triangle.point2 = e->v_r->point;
+			triangle.point3 = (e->v_r->getEdgeTo(e->v_l))->next->twin->origin->point;
             return true;
         }
         else{
