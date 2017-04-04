@@ -10,6 +10,7 @@
 #include "point_location_vertex.h"
 #include <stdio.h>
 #include <vector>
+#include <memory>
 
 namespace geo{
 //template<typename ValueT, typename SearchT, class Compare>
