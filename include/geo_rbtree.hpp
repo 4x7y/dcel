@@ -1,12 +1,15 @@
 #ifndef GEO_RBTREE_HPP
 #define GEO_RBTREE_HPP
 
+#include <iostream>
+
 template<typename ValueT, typename SearchT, class Compare>
 class RBTree
 {
 	typedef enum { RED, BLACK } Color;
 	typedef bool(*comp_func)(const ValueT&, const ValueT&);
 
+public:
 	struct Node {
 		ValueT				value;
 		Color				color;
@@ -47,9 +50,11 @@ class RBTree
 		}
 	};
 
-private:
 
-	Node *root, *NIL;
+private:
+//public:
+
+	//Node *root, *NIL;
 	Compare* comp;
 
 	//bool less(ValueT& left, ValueT& right)
@@ -124,7 +129,7 @@ private:
 			inorder(p->leftTree);
 		}
 
-		//std::cout << p->value << " ";
+		std::cout << p->value << " ";
 
 		if (p->rightTree) {
 			inorder(p->rightTree);
@@ -158,7 +163,10 @@ private:
 			return true;
 		}
 		Node *smallest = get_smallest_child(p->rightTree);
-		std::swap(p->value, smallest->value);
+		//std::swap(p->value, smallest->value);
+		ValueT temp=p->value;
+		p->value=smallest->value;
+		smallest->value=temp;
 		delete_one_child(smallest);
 
 		return true;
@@ -389,7 +397,7 @@ private:
 	}
 
 public:
-
+	Node *root, *NIL;
 	RBTree(Compare* cmp = nullptr)
 	{
 		NIL = new Node();

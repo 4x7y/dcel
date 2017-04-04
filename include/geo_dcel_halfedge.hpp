@@ -22,12 +22,14 @@ public:
 	/* The incident face of this half edge */
 	DoubleEdgeListFace		*face;
 
+	bool visited;
 
 	DoubleEdgeListHalfEdge()
 		: origin(nullptr)
 		, twin(nullptr)
 		, next(nullptr)
 		, face(nullptr)
+	    ,visited(false)
 	{}
 
 	/* Return this half edge's destination. */

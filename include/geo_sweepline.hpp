@@ -20,9 +20,9 @@ class SweepLine
 public:
 	GEO_RESULT triangulate(
 		const std::vector<Vector2>& points,
-		std::vector<Triangle>& triangles) const;
+		std::vector<Triangle>& triangles, DoubleEdgeList& dcel) const;
 	GEO_RESULT createTriangulation(
-		const std::vector<Vector2>& points, DoubleEdgeList& triangles) const;
+		const std::vector<Vector2>& points, DoubleEdgeList& triangles)const;
 
 private:
 	void start		(SweepLineVertex* vertex, SweepLineState* sweepstate) const;

@@ -5,7 +5,13 @@
 #include "geo_type.hpp"
 #include "geo_dcel.hpp"
 #include "geo_sweepline.hpp"
+#include "geo_dcel_vertex.hpp"
+#include "point_location.h"
 
+#include <stdio.h>
+
+using namespace std;
+using namespace geo;
 
 const uint WIN_WIDTH  = 512;
 const uint WIN_HEIGHT = 512;
@@ -18,14 +24,34 @@ int main(int argc, const char * argv[])
 
 	geo::DoubleEdgeList dcel;
 	std::vector<geo::Vector2> points = {
-		{400, 150}, {300, 250}, {350, 350}, {250, 300}, {300, 400},
+		{400, 150}, {350, 350}, {300, 250}/*, {250, 300}, {300, 400},
 		{200, 450}, {100, 350}, {200, 200}, {150, 150}, {250, 200},
-		{300, 100} };
+		{300, 100} */};
 	
 	geo::SweepLine sweepline;
 	std::vector<geo::Triangle> triangles;
-	sweepline.triangulate(points, triangles);
-	
+	sweepline.triangulate(points, triangles,dcel);
+
+    struct sort_x{
+        bool operator()(const DoubleEdgeListVertex* v1,const DoubleEdgeListVertex* v2){
+            return v1->point.x<v2->point.x;
+        }
+    };
+
+    dcel.vertices.sort(sort_x());
+    geo::PointLocation pl=PointLocation(&dcel);
+
+    geo::Vector2 p;
+    p.x=340;
+    p.y=250;
+    std::vector<double> v_list;
+    geo::Triangle triangle;
+
+    if(pl.Find_point_location(p,triangle))
+        cout<<"Find it";
+    else cout<<"Out of the polygon!"<<endl;
+
+
 	for (auto triangle : triangles)
 	{
 		cv::Point triangle_vertices[1][3];

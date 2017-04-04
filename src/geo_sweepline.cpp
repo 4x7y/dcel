@@ -12,9 +12,9 @@ using namespace geo;
 
 GEO_RESULT SweepLine::triangulate(
 	const std::vector<Vector2>& points,
-	std::vector<Triangle>& triangles) const
+	std::vector<Triangle>& triangles, DoubleEdgeList& dcel) const
 {
-	DoubleEdgeList dcel;
+	//DoubleEdgeList dcel;
 	createTriangulation(points, dcel);
 
 	dcel.getTriangulation(triangles);
@@ -22,9 +22,9 @@ GEO_RESULT SweepLine::triangulate(
 	return GEO_RESULT::SUCCESS;
 }
 
-GEO_RESULT SweepLine::createTriangulation(const std::vector<Vector2>& points, DoubleEdgeList& dcel) const
+GEO_RESULT SweepLine::createTriangulation(const std::vector<Vector2>& points, DoubleEdgeList& dcel)const
 {
-	if (points.size() < 4)
+	if (points.size() < 3)
 	{
 		return GEO_RESULT::INSUFFICIENT_POINTS;
 	}
