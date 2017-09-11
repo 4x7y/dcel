@@ -5,5 +5,6 @@
 
 1. DCEL data structure
 2. Sweepline Polygon Decomposition
+3. Point Location using Persistent Tree Structure
 
 ![Triangulation of Polygon](http://i.imgur.com/ua15W7C.png)
