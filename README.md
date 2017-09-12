@@ -1,6 +1,6 @@
 # Doubly connected edge list
 
-[![Build Status](https://travis-ci.org/4x7y/ComputationalGeometry.svg?branch=master)](https://travis-ci.org/4x7y/ComputationalGeometry) [![Coverage Status](https://coveralls.io/repos/github/4x7y/ComputationalGeometry/badge.svg?branch=master)](https://coveralls.io/github/4x7y/ComputationalGeometry?branch=master)
+[![Build Status](https://travis-ci.org/4x7y/dcel.svg?branch=master)](https://travis-ci.org/4x7y/dcel) [![Coverage Status](https://coveralls.io/repos/github/4x7y/dcel/badge.svg?branch=master)](https://coveralls.io/github/4x7y/dcel?branch=master)
 
 A DCEL implementation using C++ 11
 
